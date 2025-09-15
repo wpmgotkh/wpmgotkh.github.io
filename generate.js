@@ -11,8 +11,6 @@ import {
   sexIcon,
 } from './lib.js';
 
-const tree = JSON.parse(fs.readFileSync('./output.json', 'utf-8'));
-
 const eventTypes = ['EDUC', 'OCCU', 'RESI'];
 
 const friendlyEventNames = {
@@ -65,9 +63,7 @@ function generateRelationships(tree, person) {
   const lines = ['## 👩‍❤️‍👨 Relationships'];
 
   for (const family of families) {
-    person.data.xref_id === '@61086158@' && console.log('Working family', family);
     const spouse = findSpouse(tree, family, person.data.xref_id);
-    person.data.xref_id === '@61086158@' && console.log('Spouse', personName(spouse));
 
     if (!spouse) continue;
 
@@ -119,14 +115,11 @@ function generateRelationships(tree, person) {
 function generateNotes(tree, person) {
   const notes = normalizeNotes(tree, findNotes(person));
 
-  // console.log("notes", notes);
-
   if (!notes.length) return [];
 
   const lines = ['## 📝 Notes'];
 
   for (const note of notes) {
-    // console.log(note);
     lines.push(
       note
         .split('\n')
