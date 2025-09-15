@@ -7,11 +7,16 @@ import {
   getSex,
   normalizeEvent,
   normalizeNotes,
+  normalizePerson,
   personName,
   sexIcon,
 } from './lib.js';
 
+const LIVING_PERSON = 'Living Person';
+
 const eventTypes = ['EDUC', 'OCCU', 'RESI'];
+
+const urlify = (text) => text.toLowerCase().replace(/\s+/g, '-');
 
 const friendlyEventNames = {
   BIRT: 'Birth',
@@ -82,7 +87,8 @@ function generateRelationships(tree, person) {
 
     const children = family.children
       .filter(({ type }) => type === 'CHIL')
-      .map((child) => findPerson(tree, child.data.pointer));
+      .map((child) => findPerson(tree, child.data.pointer))
+      .map((child) => normalizePerson(tree, child));
 
     if (events.length) {
       lines.push('#### Events');
@@ -98,13 +104,10 @@ function generateRelationships(tree, person) {
     lines.push(`#### Children With ${name.given} ${name.surname}`);
 
     for (const child of children) {
-      const childName = personName(child);
-      if (!childName) continue;
-
       lines.push(
-        `* ${sexIcon(child)} [${Object.values(childName).join(
-          ' '
-        )}](/${child.data.xref_id.replaceAll('@', '')})`
+        `* ${sexIcon(child)} [${child.consideredLiving ? LIVING_PERSON : child.name.full}](/${
+          child.prettyId
+        })`
       );
     }
   }
@@ -131,6 +134,8 @@ function generateNotes(tree, person) {
   return lines;
 }
 
+const surnameMap = {};
+
 function processGedcom() {
   const tree = JSON.parse(fs.readFileSync('./output.json', 'utf-8'));
 
@@ -139,10 +144,10 @@ function processGedcom() {
     const name = person.children.find(({ type }) => type === 'NAME');
     const given = name?.children.find(({ type }) => type === 'GIVN')?.data.value;
     const surname = name?.children.find(({ type }) => type === 'SURN')?.data.value;
-    const sex = getSex(person);
+    const fullName = [given, surname].filter(Boolean).join(' ');
 
-    const documentLines = ['---', 'layout: index.njk', `title: ${given} ${surname}`, '---'];
-    documentLines.push(`# ${sexIcon(person)} ${given} ${surname}`);
+    const documentLines = ['---', 'layout: index.njk', `title: ${fullName}`, '---'];
+    documentLines.push(`# ${sexIcon(person)} ${fullName}`);
     documentLines.push('\n');
 
     documentLines.push(generateParentLine(tree, person));
@@ -159,6 +164,18 @@ function processGedcom() {
       tree,
       person.children.find(({ type }) => type === 'BURI')
     );
+
+    if (surname) {
+      if (!(surname in surnameMap)) {
+        surnameMap[surname] = [];
+      }
+
+      surnameMap[surname].push({
+        id,
+        name: [given, surname].filter(Boolean).join(' '),
+        birth: birth?.date,
+      });
+    }
 
     const events = [birth];
 
@@ -218,6 +235,56 @@ function processGedcom() {
 
     const fileName = `./output/${id}.md`;
     fs.writeFileSync(fileName, documentLines.filter(Boolean).join('\n'), 'utf-8');
+  }
+
+  fs.mkdirSync('./output/surnames', { recursive: true });
+
+  const top10Surnames = Object.entries(surnameMap)
+    .sort(([, a], [, b]) => b.length - a.length)
+    .slice(0, 10);
+
+  generateSurnameFiles(surnameMap);
+  generateSurnameIndex(surnameMap, top10Surnames);
+}
+
+function generateSurnameIndex(surnameMap, top10Surnames) {
+  const allSurnames = Object.keys(surnameMap).sort((a, b) => a.localeCompare(b));
+
+  const lines = [
+    `---`,
+    `layout: index.njk`,
+    `title: Surnames`,
+    `---`,
+    `## Surnames`,
+    '### Top 10 Surnames',
+    ...top10Surnames.map(([surname, entries]) => {
+      return `- [${surname}](/surnames/${urlify(surname)}) (${entries.length})`;
+    }),
+    '### All Surnames',
+    ...allSurnames.map((surname) => {
+      return `- [${surname}](/surnames/${urlify(surname)}) (${surnameMap[surname].length})`;
+    }),
+  ];
+
+  fs.writeFileSync(`./output/surnames/index.md`, lines.join('\n'), 'utf-8');
+}
+
+function generateSurnameFiles(surnameMap) {
+  for (const [surname, entries] of Object.entries(surnameMap)) {
+    entries.sort((a, b) => a.name.localeCompare(b.name));
+
+    const lines = [
+      `---`,
+      `layout: index.njk`,
+      `title: ${surname} Names`,
+      `---`,
+      `## ${surname}`,
+      ...entries.map(({ id, name, birth }) => {
+        return `- [${name}](/${id})${birth ? `, ${birth}` : ''}`;
+      }),
+    ];
+
+    fs.writeFileSync(`./output/surnames/${urlify(surname)}.md`, lines.join('\n'), 'utf-8');
   }
 }
 

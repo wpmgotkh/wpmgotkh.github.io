@@ -1,3 +1,5 @@
+import { normalizeDate } from './lib/normalizeDate.js';
+
 export const findFamily = (tree, id) => {
   if (!id) return id;
 
@@ -9,7 +11,9 @@ export const findFamily = (tree, id) => {
 export const getSex = (person) =>
   person.children.find(({ type }) => type === 'SEX').data.value.toUpperCase();
 
-export const sexIcon = (person) => (getSex(person) === 'F' ? '🟣' : '🔵');
+export const sexIcon = (person) =>
+  // TODO: remove getSex() call when all normalized
+  person.sex ?? getSex(person) === 'F' ? '🟣' : '🔵';
 
 export const findPerson = (tree, id) =>
   tree.children.find(({ type, data }) => type === 'INDI' && data.xref_id === id);
@@ -42,6 +46,7 @@ export const normalizeEvent = (tree, event) => {
   return {
     type: event.type,
     date: date ? date.data.value : '',
+    normalizedDate: date ? normalizeDate(date.data.value) : undefined,
     place: [event.data.value, place?.data.value].filter(Boolean).join(', '),
     sources: normalizeCitations(tree, sources),
   };
@@ -80,3 +85,63 @@ export const findSpouse = (tree, family, personId) => {
 
   return findPerson(tree, spouseRef.data.pointer);
 };
+
+export function shouldConsiderPersonLiving(tree, person) {
+  // we already know they've died
+  if (person.events.death?.[0]?.date) return false;
+
+  // if they were born >= 120 years ago
+
+  // if either of their parents were burn >= 160 years ago
+
+  // if any of their siblings were burn >= 140 years ago
+
+  // otherwise we assume they are living
+  return true;
+}
+
+export function normalizePerson(tree, person) {
+  if (!person) return person;
+
+  const normalizedPerson = {
+    events: {},
+    notes: [],
+    sources: [],
+  };
+
+  const name = person.children.find(({ type }) => type === 'NAME');
+  const given = name?.children.find(({ type }) => type === 'GIVN')?.data.value;
+  const surname = name?.children.find(({ type }) => type === 'SURN')?.data.value;
+
+  normalizedPerson.id = person.data.xref_id;
+  normalizedPerson.prettyId = normalizedPerson.id.replaceAll('@', '');
+  normalizedPerson.sex = getSex(person);
+  normalizedPerson.name = {
+    given,
+    surname,
+    full: [given, surname].filter(Boolean).join(' '),
+  };
+
+  // TODO: FIXME: handle multiple
+
+  const birth = normalizeEvent(
+    tree,
+    person.children.find(({ type }) => type === 'BIRT')
+  );
+  const death = normalizeEvent(
+    tree,
+    person.children.find(({ type }) => type === 'DEAT')
+  );
+  const burial = normalizeEvent(
+    tree,
+    person.children.find(({ type }) => type === 'BURI')
+  );
+
+  normalizedPerson.events.birth = birth ? [birth] : [];
+  normalizedPerson.events.death = death ? [death] : [];
+  normalizedPerson.events.burial = burial ? [burial] : [];
+
+  normalizedPerson.consideredLiving = shouldConsiderPersonLiving(tree, normalizedPerson);
+
+  return normalizedPerson;
+}
