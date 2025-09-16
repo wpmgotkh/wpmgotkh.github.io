@@ -1,21 +1,25 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
-@import "@mdit/plugin-alert/style";
+@import '@mdit/plugin-alert/style';
 
 .prose {
   &
     :where(blockquote p:last-of-type):not(
-      :where([class~="not-prose"], [class~="not-prose"] *)
+      :where([class~='not-prose'], [class~='not-prose'] *)
     )::after {
-    content: "";
+    content: '';
   }
 }
 
 .prose {
   &
     :where(blockquote p:first-of-type):not(
-      :where([class~="not-prose"], [class~="not-prose"] *)
+      :where([class~='not-prose'], [class~='not-prose'] *)
     )::before {
-    content: "";
+    content: '';
   }
+}
+
+.prosey {
+  @apply prose dark:prose-invert w-full max-w-full;
 }

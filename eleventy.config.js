@@ -1,22 +1,25 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-import tailwindcss from "@tailwindcss/postcss";
-import cssnano from "cssnano";
-import postcss from "postcss";
+import tailwindcss from '@tailwindcss/postcss';
+import cssnano from 'cssnano';
+import postcss from 'postcss';
 
-import { alert } from "@mdit/plugin-alert";
+import { alert } from '@mdit/plugin-alert';
 
 export default function (eleventyConfig) {
-  eleventyConfig.amendLibrary("md", (mdLib) => mdLib.use(alert));
+  eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(alert));
+
+  eleventyConfig.addPassthroughCopy({ 'src/names.json': 'names.json' });
+  eleventyConfig.addPassthroughCopy('src/assets/js');
 
   //compile tailwind before eleventy processes the files
-  eleventyConfig.on("eleventy.before", async () => {
-    const tailwindInputPath = path.resolve("./src/assets/styles/index.css");
+  eleventyConfig.on('eleventy.before', async () => {
+    const tailwindInputPath = path.resolve('./src/assets/styles/index.css');
 
-    const tailwindOutputPath = "./dist/assets/styles/index.css";
+    const tailwindOutputPath = './dist/assets/styles/index.css';
 
-    const cssContent = fs.readFileSync(tailwindInputPath, "utf8");
+    const cssContent = fs.readFileSync(tailwindInputPath, 'utf8');
 
     const outputDir = path.dirname(tailwindOutputPath);
     if (!fs.existsSync(outputDir)) {
@@ -37,11 +40,11 @@ export default function (eleventyConfig) {
 
     //minify tailwind css
     cssnano({
-      preset: "default",
+      preset: 'default',
     }),
   ]);
 
   return {
-    dir: { includes: "/../src", input: "output", output: "dist" },
+    dir: { includes: '/../src', input: 'output', output: 'dist' },
   };
 }

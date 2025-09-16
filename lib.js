@@ -1,4 +1,5 @@
 import { normalizeDate } from './lib/normalizeDate.js';
+import { shouldConsiderPersonLiving } from './lib/shouldConsiderPersonLiving.js';
 
 export const findFamily = (tree, id) => {
   if (!id) return id;
@@ -85,20 +86,6 @@ export const findSpouse = (tree, family, personId) => {
 
   return findPerson(tree, spouseRef.data.pointer);
 };
-
-export function shouldConsiderPersonLiving(tree, person) {
-  // we already know they've died
-  if (person.events.death?.[0]?.date) return false;
-
-  // if they were born >= 120 years ago
-
-  // if either of their parents were burn >= 160 years ago
-
-  // if any of their siblings were burn >= 140 years ago
-
-  // otherwise we assume they are living
-  return true;
-}
 
 export function normalizePerson(tree, person) {
   if (!person) return person;

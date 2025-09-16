@@ -11,6 +11,7 @@ import {
   personName,
   sexIcon,
 } from './lib.js';
+import { defunkifyPlace } from './lib/defunkifyPlace.js';
 
 const LIVING_PERSON = 'Living Person';
 
@@ -97,7 +98,7 @@ function generateRelationships(tree, person) {
       lines.push(`------ | ------ | ------`);
 
       for (const event of events) {
-        lines.push(`${getEventName(event.type)} | ${event.date} | ${event.place}`);
+        lines.push(`${getEventName(event.type)} | ${event.date} | ${defunkifyPlace(event.place)}`);
       }
     }
 
@@ -135,6 +136,7 @@ function generateNotes(tree, person) {
 }
 
 const surnameMap = {};
+const nameIndex = [];
 
 function processGedcom() {
   const tree = JSON.parse(fs.readFileSync('./output.json', 'utf-8'));
@@ -146,8 +148,8 @@ function processGedcom() {
     const surname = name?.children.find(({ type }) => type === 'SURN')?.data.value;
     const fullName = [given, surname].filter(Boolean).join(' ');
 
-    const documentLines = ['---', 'layout: index.njk', `title: ${fullName}`, '---'];
-    documentLines.push(`# ${sexIcon(person)} ${fullName}`);
+    const documentLines = ['---', 'layout: templates/basic.njk', `title: ${fullName}`, '---'];
+    documentLines.push(`## ${sexIcon(person)} ${fullName}`);
     documentLines.push('\n');
 
     documentLines.push(generateParentLine(tree, person));
@@ -177,6 +179,12 @@ function processGedcom() {
       });
     }
 
+    nameIndex.push({
+      id,
+      name: fullName,
+      birth: birth?.date,
+    });
+
     const events = [birth];
 
     const otherEvents = person.children
@@ -190,13 +198,15 @@ function processGedcom() {
     const availableEvents = events.filter(Boolean);
 
     if (availableEvents.length) {
-      documentLines.push('## 📆 Events');
+      documentLines.push('### 📆 Events');
       documentLines.push('\n');
       documentLines.push(`Type | Date | Place`);
       documentLines.push(`------ | ------ | ------`);
 
       for (const event of availableEvents) {
-        documentLines.push(`${getEventName(event.type)} | ${event.date} | ${event.place}`);
+        documentLines.push(
+          `${getEventName(event.type)} | ${event.date} | ${defunkifyPlace(event.place)}`
+        );
       }
 
       // const sourcedEvents = availableEvents.filter(
@@ -243,8 +253,26 @@ function processGedcom() {
     .sort(([, a], [, b]) => b.length - a.length)
     .slice(0, 10);
 
+  generateHomepage(top10Surnames);
   generateSurnameFiles(surnameMap);
   generateSurnameIndex(surnameMap, top10Surnames);
+
+  fs.writeFileSync('src/names.json', JSON.stringify(nameIndex), 'utf-8');
+}
+
+function generateHomepage(top10Surnames) {
+  const lines = [
+    `---`,
+    `layout: templates/homepage.njk`,
+    `title: Wilson Family Project`,
+    `---`,
+    '## Top 10 Surnames',
+    ...top10Surnames.map(([surname, entries]) => {
+      return `- [${surname}](/surnames/${urlify(surname)}) (${entries.length})`;
+    }),
+  ];
+
+  fs.writeFileSync(`./output/index.md`, lines.join('\n'), 'utf-8');
 }
 
 function generateSurnameIndex(surnameMap, top10Surnames) {
@@ -252,7 +280,7 @@ function generateSurnameIndex(surnameMap, top10Surnames) {
 
   const lines = [
     `---`,
-    `layout: index.njk`,
+    `layout: templates/basic.njk`,
     `title: Surnames`,
     `---`,
     `## Surnames`,
@@ -275,10 +303,10 @@ function generateSurnameFiles(surnameMap) {
 
     const lines = [
       `---`,
-      `layout: index.njk`,
+      `layout: templates/basic.njk`,
       `title: ${surname} Names`,
       `---`,
-      `## ${surname}`,
+      `## ${surname} Names`,
       ...entries.map(({ id, name, birth }) => {
         return `- [${name}](/${id})${birth ? `, ${birth}` : ''}`;
       }),
