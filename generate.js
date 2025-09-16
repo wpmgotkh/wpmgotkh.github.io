@@ -8,12 +8,10 @@ import {
   normalizeEvent,
   normalizeNotes,
   normalizePerson,
-  personName,
   sexIcon,
 } from './lib.js';
 import { defunkifyPlace } from './lib/defunkifyPlace.js';
-
-const LIVING_PERSON = 'Living Person';
+import { privatizeName } from './lib/privatizeName.js';
 
 const eventTypes = ['EDUC', 'OCCU', 'RESI'];
 
@@ -37,19 +35,21 @@ function generateParentLine(tree, person) {
   const birthFamily = findFamily(tree, birthFamilyId?.data.pointer);
   const mother =
     birthFamily &&
-    findPerson(tree, birthFamily.children.find(({ type }) => type === 'WIFE')?.data.pointer);
+    normalizePerson(
+      tree,
+      findPerson(tree, birthFamily.children.find(({ type }) => type === 'WIFE')?.data.pointer)
+    );
   const father =
     birthFamily &&
-    findPerson(tree, birthFamily.children.find(({ type }) => type === 'HUSB')?.data.pointer);
-  const motherId = mother && mother.data.xref_id.replaceAll('@', '');
-  const fatherId = father && father.data.xref_id.replaceAll('@', '');
-  const motherName = mother && personName(mother);
-  const fatherName = father && personName(father);
+    normalizePerson(
+      tree,
+      findPerson(tree, birthFamily.children.find(({ type }) => type === 'HUSB')?.data.pointer)
+    );
 
-  if (motherId || fatherId) {
+  if (mother?.id || father?.id) {
     const parentLinks = [
-      fatherId && `[${Object.values(fatherName).join(' ')}](/${fatherId})`,
-      motherId && `[${Object.values(motherName).join(' ')}](/${motherId})`,
+      father?.id && `[${privatizeName(father)}](/${father.prettyId})`,
+      mother?.id && `[${privatizeName(mother)}](/${mother.prettyId})`,
     ];
 
     return `${sex === 'M' ? 'Son' : 'Daughter'} of ${parentLinks.filter(Boolean).join(' and ')}`;
@@ -69,29 +69,25 @@ function generateRelationships(tree, person) {
   const lines = ['## 👩‍❤️‍👨 Relationships'];
 
   for (const family of families) {
-    const spouse = findSpouse(tree, family, person.data.xref_id);
-
-    if (!spouse) continue;
+    const sp = findSpouse(tree, family, person.id);
+    const spouse = normalizePerson(tree, sp);
 
     const events = family.children
       .filter(({ type }) => ['MARR'].includes(type))
       .map((event) => normalizeEvent(tree, event));
 
-    const name = personName(spouse);
-
-    lines.push(
-      `### ${sexIcon(spouse)} [${name.given} ${name.surname}](/${spouse.data.xref_id.replaceAll(
-        '@',
-        ''
-      )})`
-    );
+    if (spouse) {
+      lines.push(`### ${sexIcon(spouse)} [${privatizeName(spouse)}](/${spouse.prettyId})`);
+    } else {
+      lines.push(`### ⚪ Unknown Person`);
+    }
 
     const children = family.children
       .filter(({ type }) => type === 'CHIL')
       .map((child) => findPerson(tree, child.data.pointer))
       .map((child) => normalizePerson(tree, child));
 
-    if (events.length) {
+    if (!person.consideredLiving && (!spouse || !spouse.consideredLiving) && events.length) {
       lines.push('#### Events');
       lines.push('\n');
       lines.push(`Type | Date | Place`);
@@ -102,14 +98,10 @@ function generateRelationships(tree, person) {
       }
     }
 
-    lines.push(`#### Children With ${name.given} ${name.surname}`);
+    lines.push(`#### Children With ${privatizeName(spouse) ?? 'Unknown Person'}`);
 
     for (const child of children) {
-      lines.push(
-        `* ${sexIcon(child)} [${child.consideredLiving ? LIVING_PERSON : child.name.full}](/${
-          child.prettyId
-        })`
-      );
+      lines.push(`* ${sexIcon(child)} [${privatizeName(child)}](/${child.prettyId})`);
     }
   }
 
@@ -141,51 +133,41 @@ const nameIndex = [];
 function processGedcom() {
   const tree = JSON.parse(fs.readFileSync('./output.json', 'utf-8'));
 
-  for (const person of tree.children.filter(({ type }) => type === 'INDI')) {
-    const id = person.data.xref_id.replaceAll('@', '');
-    const name = person.children.find(({ type }) => type === 'NAME');
-    const given = name?.children.find(({ type }) => type === 'GIVN')?.data.value;
-    const surname = name?.children.find(({ type }) => type === 'SURN')?.data.value;
-    const fullName = [given, surname].filter(Boolean).join(' ');
+  const people = tree.children
+    .filter(({ type }) => type === 'INDI')
+    .map((person) => normalizePerson(tree, person));
 
-    const documentLines = ['---', 'layout: templates/basic.njk', `title: ${fullName}`, '---'];
-    documentLines.push(`## ${sexIcon(person)} ${fullName}`);
+  for (const person of people) {
+    const documentLines = [
+      '---',
+      'layout: templates/basic.njk',
+      `title: ${privatizeName(person)}`,
+      '---',
+    ];
+    documentLines.push(`## ${sexIcon(person)} ${privatizeName(person)}`);
     documentLines.push('\n');
 
     documentLines.push(generateParentLine(tree, person));
 
-    const birth = normalizeEvent(
-      tree,
-      person.children.find(({ type }) => type === 'BIRT')
-    );
-    const death = normalizeEvent(
-      tree,
-      person.children.find(({ type }) => type === 'DEAT')
-    );
-    const burial = normalizeEvent(
-      tree,
-      person.children.find(({ type }) => type === 'BURI')
-    );
-
-    if (surname) {
-      if (!(surname in surnameMap)) {
-        surnameMap[surname] = [];
+    if (person.name.surname) {
+      if (!(person.name.surname in surnameMap)) {
+        surnameMap[person.name.surname] = [];
       }
 
-      surnameMap[surname].push({
-        id,
-        name: [given, surname].filter(Boolean).join(' '),
-        birth: birth?.date,
+      surnameMap[person.name.surname].push({
+        id: person.prettyId,
+        name: person.name.full,
+        birth: person.events.birth?.[0]?.date,
       });
     }
 
     nameIndex.push({
-      id,
-      name: fullName,
-      birth: birth?.date,
+      id: person.prettyId,
+      name: person.name.full,
+      birth: person.events.birth?.[0]?.date,
     });
 
-    const events = [birth];
+    const events = [...person.events.birth];
 
     const otherEvents = person.children
       .filter(({ type }) => eventTypes.includes(type))
@@ -193,11 +175,11 @@ function processGedcom() {
 
     events.push(...otherEvents);
 
-    events.push(death, burial);
+    events.push(...person.events.death, ...person.events.burial);
 
     const availableEvents = events.filter(Boolean);
 
-    if (availableEvents.length) {
+    if (!person.consideredLiving && availableEvents.length) {
       documentLines.push('### 📆 Events');
       documentLines.push('\n');
       documentLines.push(`Type | Date | Place`);
@@ -241,9 +223,11 @@ function processGedcom() {
 
     documentLines.push(...generateRelationships(tree, person));
 
-    documentLines.push(...generateNotes(tree, person));
+    if (!person.consideredLiving) {
+      documentLines.push(...generateNotes(tree, person));
+    }
 
-    const fileName = `./output/${id}.md`;
+    const fileName = `./output/${person.prettyId}.md`;
     fs.writeFileSync(fileName, documentLines.filter(Boolean).join('\n'), 'utf-8');
   }
 

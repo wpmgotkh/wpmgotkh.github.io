@@ -14,7 +14,7 @@ export const getSex = (person) =>
 
 export const sexIcon = (person) =>
   // TODO: remove getSex() call when all normalized
-  person.sex ?? getSex(person) === 'F' ? '🟣' : '🔵';
+  (person.sex ?? getSex(person)) === 'F' ? '🟣' : '🔵';
 
 export const findPerson = (tree, id) =>
   tree.children.find(({ type, data }) => type === 'INDI' && data.xref_id === id);
@@ -129,6 +129,9 @@ export function normalizePerson(tree, person) {
   normalizedPerson.events.burial = burial ? [burial] : [];
 
   normalizedPerson.consideredLiving = shouldConsiderPersonLiving(tree, normalizedPerson);
+
+  // FIXME: deprecate this
+  normalizedPerson.children = person.children;
 
   return normalizedPerson;
 }
