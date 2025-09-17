@@ -59,7 +59,9 @@ export const getCitationPage = (citation) =>
 export const normalizeCitations = (tree, citations) => {
   return citations.map((citation) => {
     const source = findSource(tree, citation.data.pointer);
-    const name = source.children.find(({ type }) => type === 'TITL');
+    const name =
+      source.children.find(({ type }) => type === 'TITL') ??
+      source.children.find(({ type }) => type === 'PERI');
 
     return {
       id: citation.data.pointer.replaceAll('@', ''),
