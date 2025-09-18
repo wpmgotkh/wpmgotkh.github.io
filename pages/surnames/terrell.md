@@ -1,0 +1,36 @@
+---
+layout: templates/basic.njk
+title: Terrell Names
+---
+## Terrell Names
+- [Alonzo Philorman Terrell](/people/1/16020599), 05 SEP 1809
+- [Andrew Jackson Terrell](/people/1/15331189), 01 MAR 1815
+- [Arthur Terrell](/people/7/79436691), 06 FEB 1894
+- [Clara E. Terrell](/people/6/62490094), 07 NOV 1883
+- [Curtland Terrell](/people/4/47972604), Aug 1856
+- [Elihu Franklin Terrell](/people/8/86596293), 03 JAN 1802
+- [Eliza Terrell](/people/1/14584373), 12 SEP 1807
+- [Ester Terrell](/people/2/27094826), 05 SEP 1816
+- [Franklin T. Terrell](/people/1/12166472), 11 OCT 1860
+- [Fred Terrell](/people/9/92332748), 20 OCT 1881
+- [Harriet Terrell](/people/4/44975736), 09 JUL 1818
+- [Henry Terrell](/people/6/6534130), 07 APR 1806
+- [Horace Terrell](/people/4/43136442), 10 AUG 1803
+- [Horatio Terrell](/people/7/74880220), 14 NOV 1805
+- [Ichabod Terrell](/people/6/66420816), 20 DEC 1763
+- [Ichabod Terrell](/people/8/85336048), 01 OCT 1800
+- [Ida Mary Terrell](/people/7/71382896), 17 NOV 1891
+- [Lovinus Terrell](/people/8/80690232), 04 DEC 1824
+- [Lucinda Terrell](/people/4/4141148), 06 NOV 1795
+- [Lucinda Terrell](/people/9/94352489), 19 DEC 1812
+- [Lydia Terrell](/people/8/84586144), 02 SEP 1787
+- [Marcus Terrell](/people/2/231106), 05 JUN 1822
+- [Mary Terrell](/people/3/36199064), 17 MAY 1801
+- [Oliver Terrell](/people/6/67228756), 02 SEP 1791
+- [Orpha Terrell](/people/6/62971808), 02 MAY 1798
+- [Paulina Terrell](/people/1/17012140), 30 JUN 1823
+- [Philander Terrell](/people/2/24198270), 1789
+- [Rosetta Avrilla Terrell](/people/8/84698967), 08 JUL 1853
+- [Sherman A. Terrell](/people/6/61267132), 19 MAY 1851
+- [Tillotson S. Terrell](/people/2/25548435), 01 MAY 1785
+- [Tillotson T. Terrell](/people/5/59687792), 04 MAR 1821

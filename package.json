@@ -5,9 +5,11 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "generate": "node generate.js && eleventy --input ./output",
+    "dev": "eleventy --serve",
+    "generate:md": "node generate.js",
+    "generate:html": "eleventy",
+    "generate": "npm run generate:md && npm run generate:html",
     "test": "vitest"
   },
   "dependencies": {

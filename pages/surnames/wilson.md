@@ -1,0 +1,47 @@
+---
+layout: templates/basic.njk
+title: Wilson Names
+---
+## Wilson Names
+- [Alice Wilson](/people/4/41702), about 1867
+- [Anna L. Wilson](/people/7/73378674), 30 JUL 1879
+- [Cambrus Wilson](/people/8/82575654), April 1833
+- [Cambyses Wilson](/people/3/335666), June 1864
+- [Charles Wilson](/people/6/64845280), about 1857
+- [Charlotte Marie Wilson](/people/1/13972960), about 1863
+- [Clifford Jack Wilson](/people/4/40508928), 03 FEB 1930
+- [Clifford Lynn Wilson](/people/4/42196820), 23 APR 1904
+- [Dixie Lee Wilson](/people/8/87584724), 06 AUG 1932
+- [Donald Lorenzo Wilson](/people/7/72318427), 17 AUG 1913
+- [Duane LaVerne Wilson](/people/2/26268040), 08 SEP 1965
+- [Duane LaVerne Wilson](/people/6/61086158), 19 APR 1945
+- [Edmund Holloway Wilson](/people/6/67777324), 22 JUL 1829
+- [Everett Wilson](/people/5/5482456), 17 JUL 1885
+- [Fletcher Maxwell Wilson](/people/3/32597724), 03 JUN 1913
+- [Flora Wilson](/people/2/2426620), Nov 1863
+- [Fred Wilson](/people/4/44161340), about 1868
+- [Gary Lee Wilson](/people/8/83638300), 08 JAN 1946
+- [George E. Wilson](/people/5/52481817), about 1869
+- [Hannah M. Wilson](/people/9/97992363), about 1859
+- [Hannah P. Wilson](/people/2/21937522), 27 OCT 1899
+- [Hazel Wilson](/people/2/23514264), about 1895
+- [Hiram H. Wilson](/people/8/82044077), 1807
+- [Hiram Wilson](/people/5/58050398), about 1853
+- [James E. Wilson](/people/5/54950695), 11 APR 1856
+- [James Wilson](/people/1/17213544), 1905
+- [Joseph Evart Wilson](/people/5/57306025), May 1871
+- [Joy Dawn Wilson](/people/2/29575132), 13 JAN 1930
+- [Judith Ann Wilson](/people/5/50745588), 05 OCT 1940
+- [Keith Allen Wilson](/people/3/37910144), 02 JUN 1970
+- [Lawrence A. Wilson](/people/8/86477632), 15 JUN 1911
+- [Lenora Wilson](/people/4/43167007), 31 JUL 1883
+- [Leora E. Wilson](/people/2/22233872), about 1867
+- [Marvin Jean Wilson](/people/4/40728128), 25 OCT 1939
+- [Mary Estelle Wilson](/people/4/46787428), 23 APR 1881
+- [Mary Jane Wilson](/people/6/68306241), 1850
+- [Phebe J. Wilson](/people/9/96493800), about 1855
+- [Polly Ann Wilson](/people/9/97244328), abt 1853
+- [Raymond Eugene Wilson](/people/8/81165742), about 1895
+- [Ryan Allen Wilson](/people/2/24746046), 11 MAR 1995
+- [Samuel Wilson](/people/2/26563376), about 1831
+- [Thomas J. Wilson](/people/5/56990191), about 1861

@@ -1,5 +1,7 @@
 import fs from 'fs';
+import { parse as parseGedcom } from 'gedcom';
 import ora from 'ora';
+import path from 'path';
 import {
   findFamily,
   findNotes,
@@ -13,6 +15,9 @@ import {
 } from './lib.js';
 import { defunkifyPlace } from './lib/defunkifyPlace.js';
 import { privatizeName } from './lib/privatizeName.js';
+
+const PAGES_DIR = './pages';
+const LINE_BREAK = '   ';
 
 const eventTypes = ['EDUC', 'OCCU', 'RESI'];
 
@@ -49,8 +54,8 @@ function generateParentLine(tree, person) {
 
   if (mother?.id || father?.id) {
     const parentLinks = [
-      father?.id && `[${privatizeName(father)}](/${father.prettyId})`,
-      mother?.id && `[${privatizeName(mother)}](/${mother.prettyId})`,
+      father?.id && `[${privatizeName(father)}](${father.url})`,
+      mother?.id && `[${privatizeName(mother)}](${mother.url})`,
     ];
 
     return `${sex === 'M' ? 'Son' : 'Daughter'} of ${parentLinks.filter(Boolean).join(' and ')}`;
@@ -67,7 +72,7 @@ function generateRelationships(tree, person) {
 
   if (!families.length) return [];
 
-  const lines = ['## 👩‍❤️‍👨 Relationships'];
+  const lines = ['## 👩‍❤️‍👨 Relationships', LINE_BREAK];
 
   for (const family of families) {
     const sp = findSpouse(tree, family, person.id);
@@ -78,10 +83,12 @@ function generateRelationships(tree, person) {
       .map((event) => normalizeEvent(tree, event));
 
     if (spouse) {
-      lines.push(`### ${sexIcon(spouse)} [${privatizeName(spouse)}](/${spouse.prettyId})`);
+      lines.push(`### ${sexIcon(spouse)} [${privatizeName(spouse)}](${spouse.url})`);
     } else {
       lines.push(`### ⚪ Unknown Person`);
     }
+
+    lines.push(LINE_BREAK);
 
     const children = family.children
       .filter(({ type }) => type === 'CHIL')
@@ -102,7 +109,7 @@ function generateRelationships(tree, person) {
     lines.push(`#### Children With ${privatizeName(spouse) ?? 'Unknown Person'}`);
 
     for (const child of children) {
-      lines.push(`* ${sexIcon(child)} [${privatizeName(child)}](/${child.prettyId})`);
+      lines.push(`* ${sexIcon(child)} [${privatizeName(child)}](${child.url})`);
     }
   }
 
@@ -131,16 +138,30 @@ function generateNotes(tree, person) {
 const surnameMap = {};
 const nameIndex = [];
 
-function processGedcom() {
+function processGedcom(inputFile) {
+  console.log(`Processing GEDCOM file: ${inputFile}`);
+
   const spinner = ora('Processing individuals...').start();
 
-  const tree = JSON.parse(fs.readFileSync('./output.json', 'utf-8'));
+  const tree = parseGedcom(fs.readFileSync(inputFile, 'utf-8'));
 
   const people = tree.children
     .filter(({ type }) => type === 'INDI')
     .map((person) => normalizePerson(tree, person));
 
+  const noteworthy = [];
+
   for (const person of people) {
+    const snapshot = {
+      name: person.name.full,
+      birth: person.events.birth?.[0]?.date,
+      url: person.url,
+    };
+
+    if (person.noteworthy) {
+      noteworthy.push(snapshot);
+    }
+
     const documentLines = [
       '---',
       'layout: templates/basic.njk',
@@ -148,27 +169,31 @@ function processGedcom() {
       '---',
     ];
     documentLines.push(`## ${sexIcon(person)} ${privatizeName(person)}`);
-    documentLines.push('\n');
+    documentLines.push(LINE_BREAK);
 
-    documentLines.push(generateParentLine(tree, person));
+    const parentLine = generateParentLine(tree, person);
+    if (parentLine) {
+      documentLines.push(parentLine);
+      documentLines.push(LINE_BREAK);
+    }
 
-    if (person.name.surname) {
+    if (person.noteworthy && person.consideredLiving) {
+      documentLines.push(
+        '> [!note]',
+        '> This is a public figure and therefore bypasses some privacy restrictions for living persons.'
+      );
+      documentLines.push('\n');
+    }
+
+    if ((!person.consideredLiving || person.noteworthy) && person.name.surname) {
       if (!(person.name.surname in surnameMap)) {
         surnameMap[person.name.surname] = [];
       }
 
-      surnameMap[person.name.surname].push({
-        id: person.prettyId,
-        name: person.name.full,
-        birth: person.events.birth?.[0]?.date,
-      });
-    }
+      surnameMap[person.name.surname].push(snapshot);
 
-    nameIndex.push({
-      id: person.prettyId,
-      name: person.name.full,
-      birth: person.events.birth?.[0]?.date,
-    });
+      nameIndex.push(snapshot);
+    }
 
     const events = [...person.events.birth];
 
@@ -197,26 +222,30 @@ function processGedcom() {
 
         documentLines.push(`${eventName} | ${event.date} | ${defunkifyPlace(event.place)}`);
       }
+
+      documentLines.push(LINE_BREAK);
     }
 
     documentLines.push(...generateRelationships(tree, person));
 
-    if (!person.consideredLiving) {
+    if (!person.consideredLiving || person.noteworthy) {
       documentLines.push(...generateNotes(tree, person));
     }
 
     if (!person.consideredLiving && availableEvents.length) {
+      documentLines.push('### 📰 Event Sources');
+      documentLines.push(LINE_BREAK);
+
       for (let eventIndex = 0; eventIndex < availableEvents.length; eventIndex++) {
         const event = availableEvents[eventIndex];
 
         if (!event.sources.length) continue;
 
         documentLines.push(
-          `### <a id="event-${eventIndex}"></a> ${getEventName(event.type)}${
+          `#### <a id="event-${eventIndex}"></a> ${getEventName(event.type)}${
             event.date ? `, ${event.date}` : ''
           }`
         );
-        documentLines.push('#### Sources');
 
         for (const citation of event.sources) {
           documentLines.push(`* ${citation.name} ${citation.page ? ` - ${citation.page}` : ``}`);
@@ -229,14 +258,27 @@ function processGedcom() {
             )
           );
         }
+
+        if (eventIndex + 1 !== availableEvents.length) {
+          documentLines.push(LINE_BREAK);
+        }
       }
     }
 
-    const fileName = `./output/${person.prettyId}.md`;
-    fs.writeFileSync(fileName, documentLines.filter(Boolean).join('\n'), 'utf-8');
+    const fileName = `${PAGES_DIR}${person.url}.md`;
+    fs.mkdirSync(path.dirname(fileName), { recursive: true });
+
+    fs.writeFileSync(
+      fileName,
+      documentLines
+        .filter(Boolean)
+        .map((line) => line.trim())
+        .join('\n'),
+      'utf-8'
+    );
   }
 
-  fs.mkdirSync('./output/surnames', { recursive: true });
+  fs.mkdirSync(`${PAGES_DIR}/surnames`, { recursive: true });
 
   const top10Surnames = Object.entries(surnameMap)
     .sort(([, a], [, b]) => b.length - a.length)
@@ -245,7 +287,7 @@ function processGedcom() {
   spinner.succeed('Processed individuals!');
   spinner.text = 'Generating homepage...';
 
-  generateHomepage(top10Surnames);
+  generateHomepage(top10Surnames, noteworthy);
 
   spinner.succeed('Generated homepage!');
   spinner.text = 'Generating surname files...';
@@ -257,7 +299,7 @@ function processGedcom() {
 
   generateSurnameIndex(surnameMap, top10Surnames);
 
-  fs.writeFileSync('src/names.json', JSON.stringify(nameIndex), 'utf-8');
+  fs.writeFileSync('tmp/names.json', JSON.stringify(nameIndex), 'utf-8');
 
   spinner.succeed('Generated surname index!');
   spinner.succeed('Done!');
@@ -265,19 +307,29 @@ function processGedcom() {
   spinner.stop();
 }
 
-function generateHomepage(top10Surnames) {
+function generateHomepage(top10Surnames, noteworthy) {
   const lines = [
     `---`,
     `layout: templates/homepage.njk`,
     `title: Wilson Family Project`,
     `---`,
+    ...(noteworthy.length
+      ? [
+          '## Noteworthy People',
+          ...noteworthy.map((person) => {
+            return ` - [${person.name}](${person.url})${person.birth ? `, ${person.birth}` : ''}`;
+          }),
+        ]
+      : []),
     '## Top 10 Surnames',
     ...top10Surnames.map(([surname, entries]) => {
-      return `- [${surname}](/surnames/${urlify(surname)}) (${entries.length})`;
+      return ` - [${surname}](/surnames/${urlify(surname)}) (${entries.length})`;
     }),
+    '\n',
+    '[View All](/surnames)',
   ];
 
-  fs.writeFileSync(`./output/index.md`, lines.join('\n'), 'utf-8');
+  fs.writeFileSync(`${PAGES_DIR}/index.md`, lines.join('\n'), 'utf-8');
 }
 
 function generateSurnameIndex(surnameMap, top10Surnames) {
@@ -299,7 +351,7 @@ function generateSurnameIndex(surnameMap, top10Surnames) {
     }),
   ];
 
-  fs.writeFileSync(`./output/surnames/index.md`, lines.join('\n'), 'utf-8');
+  fs.writeFileSync(`${PAGES_DIR}/surnames/index.md`, lines.join('\n'), 'utf-8');
 }
 
 function generateSurnameFiles(surnameMap) {
@@ -312,13 +364,20 @@ function generateSurnameFiles(surnameMap) {
       `title: ${surname} Names`,
       `---`,
       `## ${surname} Names`,
-      ...entries.map(({ id, name, birth }) => {
-        return `- [${name}](/${id})${birth ? `, ${birth}` : ''}`;
+      ...entries.map(({ name, birth, url }) => {
+        return `- [${name}](${url})${birth ? `, ${birth}` : ''}`;
       }),
     ];
 
-    fs.writeFileSync(`./output/surnames/${urlify(surname)}.md`, lines.join('\n'), 'utf-8');
+    fs.writeFileSync(`${PAGES_DIR}/surnames/${urlify(surname)}.md`, lines.join('\n'), 'utf-8');
   }
 }
 
-processGedcom();
+const inputFile = process.argv[2];
+
+if (!inputFile || !fs.existsSync(inputFile)) {
+  console.error('Please provide a valid input file.');
+  process.exit(1);
+}
+
+processGedcom(inputFile);

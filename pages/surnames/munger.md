@@ -1,0 +1,38 @@
+---
+layout: templates/basic.njk
+title: Munger Names
+---
+## Munger Names
+- [Almira Munger](/people/3/36419408), 25 SEP 1827
+- [Ann Munger](/people/6/68439647), 01 FEB 1703
+- [Deliverence Munger](/people/1/16376581), 12 MAR 1697
+- [Elnathan Munger](/people/3/39748505), 14 JUL 1714
+- [James Munger](/people/7/73707528), 01 MAY 1701
+- [Jane Munger](/people/1/1929334), 27 FEB 1705
+- [Jeremiah Munger](/people/1/19410568), 03 MAY 1755
+- [Jerusha Munger](/people/8/85922584), 29 SEP 1745
+- [John Munger](/people/5/5748706), 26 APR 1660
+- [Joseph Munger](/people/4/48832802), 28 DEC 1758
+- [Joseph Munger](/people/8/82274524), 19 JAN 1693
+- [Joseph Munger](/people/4/48475708), JUL 1719
+- [Joseph Munger](/people/8/88850948), abt 1832
+- [Marinda Munger](/people/4/42602883), 28 AUG 1837
+- [Miriam Munger](/people/1/13266841), 21 FEB 1789
+- [Nathaniel Munger](/people/9/90245281), 26 FEB 1699
+- [Nathaniel Munger](/people/3/38968541), 05 OCT 1712
+- [Nicholas Munger](/people/4/40603656), abt 1630
+- [Orilla Munger](/people/6/60133360), 25 JUN 1800
+- [Rebe Munger](/people/3/39304822), 10 FEB 1787
+- [Rhoda Munger](/people/2/23648419), ABT 1761
+- [Roswell Munger](/people/2/21686617), Mar 1791
+- [Samuel Munger](/people/1/17676382), 05 OCT 1712
+- [Samuel Munger](/people/6/64239804), 07 FEB 1690
+- [Samuel Munger](/people/5/57362828), abt 1665
+- [Samuel Munger](/people/1/17819572), 14 MAY 1748
+- [Sarah Munger](/people/2/24642538), 16 MAR 1695
+- [Sarah Munger](/people/2/2457192), 1726
+- [Sarah Munger](/people/8/85764310), 08 SEP 1750
+- [Stillman Munger](/people/5/55728126), 26 JAN 1783
+- [Submit Munger](/people/1/10597619), 05 JAN 1711
+- [Wealthy Munger](/people/3/31830663), 13 FEB 1785
+- [William Munger](/people/8/84347792), ABT 1840

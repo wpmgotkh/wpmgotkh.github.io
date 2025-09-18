@@ -1,0 +1,36 @@
+---
+layout: templates/basic.njk
+title: Wilmot Names
+---
+## Wilmot Names
+- [Alexander Wilmot](/people/3/3478994), 18 DEC 1672
+- [Amos Wilmot](/people/3/34677049), 29 FEB 1756
+- [Ann Wilmot](/people/5/51633864)
+- [Anna Wilmot](/people/5/59667336), 26 FEB 1670
+- [Asa Wilmot](/people/1/15735504), 11 APR 1716
+- [Asa Wilmot](/people/4/47117298), ABT 1748
+- [Asa Wilmot](/people/9/91393496), 06 AUG 1752
+- [Benjamin Wilmot](/people/3/32094822), 07 MAR 1661
+- [Benjamin Wilmot](/people/6/61915340)
+- [Benjamin Wilmot](/people/4/47740032)
+- [Daniel Wilmot](/people/1/15714816), 26 MAY 1710
+- [Electa Wilmot](/people/7/77370498), 15 FEB 1776
+- [Elijah Wilmot](/people/9/99050066), 17 DEC 1742
+- [Elisha Johnson Wilmot](/people/5/57693706), 1793
+- [Elisha Wilmot](/people/2/21177328), 12 MAR 1763
+- [Elizabeth Wilmot](/people/9/91867119), 24 MAR 1682
+- [Ezekiel Wilmot](/people/7/74243487), 15 FEB 1708
+- [Joel Wilmot](/people/1/17310990), 08 MAR 1759
+- [John Wilmot](/people/2/24658068), 20 JAN 1667
+- [Mary Wilmot](/people/6/63055620), 24 AUG 1725
+- [Mary Wilmot](/people/9/97290136), 07 JAN 1677
+- [Sarah Wilmot](/people/3/33582066), 10 APR 1745
+- [Sarah Wilmot](/people/3/3300032), 08 MAR 1663
+- [Silas Wilmot](/people/4/49979698), 19 OCT 1790
+- [Tabitha Wilmot](/people/7/75933173), 12 NOV 1675
+- [Thomas Wilmot](/people/4/47695656), 06 JAN 1750
+- [Thomas Wilmot](/people/3/36930663), 21 SEP 1679
+- [Thomas Wilmot](/people/5/57007378), 25 AUG 1712
+- [William Wilmot](/people/7/75329141), 04 MAY 1706
+- [William Wilmot](/people/4/47205976), 1632
+- [William Wilmot](/people/6/66512566), 17 OCT 1665

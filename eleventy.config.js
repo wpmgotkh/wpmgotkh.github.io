@@ -10,7 +10,7 @@ import { alert } from '@mdit/plugin-alert';
 export default function (eleventyConfig) {
   eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(alert));
 
-  eleventyConfig.addPassthroughCopy({ 'src/names.json': 'names.json' });
+  eleventyConfig.addPassthroughCopy({ 'tmp/names.json': 'names.json' });
   eleventyConfig.addPassthroughCopy('src/assets/js');
 
   //compile tailwind before eleventy processes the files
@@ -45,6 +45,6 @@ export default function (eleventyConfig) {
   ]);
 
   return {
-    dir: { includes: '/../src', input: 'output', output: 'dist' },
+    dir: { includes: '/../src', input: 'pages', output: 'dist' },
   };
 }

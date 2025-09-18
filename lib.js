@@ -16,6 +16,9 @@ export const sexIcon = (person) =>
   // TODO: remove getSex() call when all normalized
   (person.sex ?? getSex(person)) === 'F' ? '🟣' : '🔵';
 
+export const findRecord = (tree, tag, id) =>
+  tree.children.find(({ type, data }) => type === tag && data.xref_id === id);
+
 export const findPerson = (tree, id) =>
   tree.children.find(({ type, data }) => type === 'INDI' && data.xref_id === id);
 
@@ -101,15 +104,28 @@ export function normalizePerson(tree, person) {
   const name = person.children.find(({ type }) => type === 'NAME');
   const given = name?.children.find(({ type }) => type === 'GIVN')?.data.value;
   const surname = name?.children.find(({ type }) => type === 'SURN')?.data.value;
+  const full = name?.data.value.replaceAll(/\//g, '');
 
   normalizedPerson.id = person.data.xref_id;
-  normalizedPerson.prettyId = normalizedPerson.id.replaceAll('@', '');
+
+  const prettyId = normalizedPerson.id.replaceAll('@', '');
+
+  normalizedPerson.prettyId = prettyId;
+  normalizedPerson.url = `/people/${prettyId.substr(0, 1)}/${prettyId}`;
+
   normalizedPerson.sex = getSex(person);
   normalizedPerson.name = {
     given,
     surname,
-    full: [given, surname].filter(Boolean).join(' '),
+    full,
   };
+
+  normalizedPerson.noteworthy = person.children
+    .filter(({ type }) => type === 'LABL')
+    .map(({ data }) => findRecord(tree, 'LABL', data.pointer))
+    .find(
+      ({ children }) => children.find(({ type }) => type === 'TITL')?.data.value === 'Noteworthy'
+    );
 
   // TODO: FIXME: handle multiple
 

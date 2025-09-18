@@ -1,0 +1,47 @@
+---
+layout: templates/basic.njk
+title: Kobel Names
+---
+## Kobel Names
+- [Bessie Elma Kobel](/people/3/34277096), 14 SEP 1896
+- [Catherine Kobel](/people/7/73520945), 1843
+- [Charles Kobel](/people/8/82937830), about 1865
+- [Charles Kobel](/people/1/10022372), abt 1843
+- [Christian Kobel](/people/1/17423128), 20 JUN 1808
+- [Christian Kobel](/people/6/64236632), abt 1765
+- [Clifford H. Kobel](/people/2/28732388), 27 JUL 1914
+- [Elvira Jannette Kobel](/people/2/2756961), 26 FEB 1910
+- [Erma Violet Kobel](/people/9/97335746), 26 AUG 1919
+- [Fred Hayes Kobel](/people/1/1672312), 29 JUL 1894
+- [Fred Willis Kobel](/people/5/51851068), 31 MAY 1921
+- [Genevieve May Kobel](/people/2/28360305), 04 JUL 1924
+- [Harold LeRoy Kobel](/people/6/65495296), 08 JUL 1925
+- [Harry William Kobel](/people/3/30496161), 10 JUL 1892
+- [Henry Kobel](/people/8/84112000), 19 MAR 1835
+- [Henry L. Kobel](/people/6/66319774), 06 DEC 1863
+- [Hyram Kobel](/people/3/34505322), 25 JAN 1838
+- [Jessie Gertrude Kobel](/people/9/95617946), 27 SEP 1918
+- [Johann George Kobel](/people/9/96923637), 03 OCT 1656
+- [Johann George Kobel](/people/1/13002801), 11 NOV 1602
+- [Johann Heinrich Kobel](/people/7/70639420), 20 JUL 1712
+- [Johann Heinrich Kobel](/people/6/65601892), 1741
+- [Johann Jacob Kobel](/people/8/81342340), 1682
+- [John Wesley Kobel](/people/2/24649136), 22 FEB 1869
+- [Joseph Henry Kobel](/people/5/50400728), 15 JUL 1900
+- [Joseph Kobel](/people/4/44694656), 06 JUL 1841
+- [June Pauline Kobel](/people/4/43589122), 14 APR 1922
+- [Kenneth Kobel](/people/4/44916336), 1941
+- [Kobel](/people/4/43995845), 16 NOV 1902
+- [Kobel](/people/7/71908748), 29 JAN 1909
+- [Kobel](/people/2/22427094), 12 FEB 1834
+- [Leonard Kobel](/people/3/3731471), bef 1510
+- [Levi David Kobel](/people/5/56833508), 10 JAN 1870
+- [Mabel Nellie Kobel](/people/6/69123608), 28 OCT 1906
+- [Nicholaus Bernhard Kobel](/people/5/51558544), 28 FEB 1627
+- [Nicholaus Kobel](/people/4/41497852), 1577
+- [Ralph Hayes Kobel](/people/7/77168350), 03 APR 1917
+- [Ronald D. Kobel](/people/4/42573952), 09 APR 1921
+- [Sarah Ann Kobel](/people/4/45477428), 28 MAY 1832
+- [Sarah Blanche Kobel](/people/4/40397804), 13 JAN 1904
+- [Vedah May Kobel](/people/5/52554620), 25 SEP 1898
+- [Vedah Verla Kobel](/people/6/67698772), 09 MAY 1916
