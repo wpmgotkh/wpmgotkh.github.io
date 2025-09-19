@@ -316,6 +316,7 @@ function generateHomepage(top10Surnames, noteworthy) {
     ...(noteworthy.length
       ? [
           '## Noteworthy People',
+          'These are people somewhere in the tree who are famous or otherwise noteworthy.',
           ...noteworthy.map((person) => {
             return ` - [${person.name}](${person.url})${person.birth ? `, ${person.birth}` : ''}`;
           }),

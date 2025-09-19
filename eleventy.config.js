@@ -10,10 +10,11 @@ import { alert } from '@mdit/plugin-alert';
 export default function (eleventyConfig) {
   eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(alert));
 
-  eleventyConfig.addPassthroughCopy({ 'tmp/names.json': 'names.json' });
-  eleventyConfig.addPassthroughCopy('src/assets/js');
+  eleventyConfig.addPassthroughCopy({
+    'tmp/names.json': 'names.json',
+    'src/assets/js': 'assets/js',
+  });
 
-  //compile tailwind before eleventy processes the files
   eleventyConfig.on('eleventy.before', async () => {
     const tailwindInputPath = path.resolve('./src/assets/styles/index.css');
 
@@ -35,10 +36,7 @@ export default function (eleventyConfig) {
   });
 
   const processor = postcss([
-    //compile tailwind
     tailwindcss(),
-
-    //minify tailwind css
     cssnano({
       preset: 'default',
     }),

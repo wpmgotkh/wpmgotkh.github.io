@@ -3,6 +3,7 @@ layout: templates/homepage.njk
 title: Wilson Family Project
 ---
 ## Noteworthy People
+These are people somewhere in the tree who are famous or otherwise noteworthy.
  - [George Herbert Walker Bush](/people/8/89339690), 12 JUN 1924
  - [George Walker Bush](/people/2/29497980), 06 JUL 1946
  - [John Ellis Bush](/people/8/82675226), 11 FEB 1953
