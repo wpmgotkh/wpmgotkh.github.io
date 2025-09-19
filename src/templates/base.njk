@@ -10,14 +10,16 @@ title: Wilson Family Project
 </head>
 <body>
   <div class="px-8 py-4">
-    <div class="prose dark:prose-invert">
+    <div class="prosey">
       <h1><a href="/">Wilson Family Project</a></h1>
+      <div>
+      <a href="/">Home</a> | <a href="/surnames">Surnames</a> | <a href="/dead-ends">Dead Ends</a>
     </div>
     
     {{ content | safe }}
 
     <div class="text-sm mt-4 border-t border-gray-300 pt-4 dark:border-gray-600">
-      Last Updated: {{ page.date.toLocaleDateString() }}
+      Site last updated on {{ page.date.toLocaleDateString() }}
     </div>
   </div>
 </body>
