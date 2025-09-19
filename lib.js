@@ -1,10 +1,9 @@
+import { randomUUID } from 'crypto';
 import { normalizeDate } from './lib/normalizeDate.js';
 import { shouldConsiderPersonLiving } from './lib/shouldConsiderPersonLiving.js';
 
 export const findFamily = (tree, id) => {
   if (!id) return id;
-
-  const families = tree.children.filter(({ type }) => type === 'FAM');
 
   return tree.children.find(({ type, data }) => type === 'FAM' && data.xref_id === id);
 };
@@ -48,6 +47,7 @@ export const normalizeEvent = (tree, event) => {
   const sources = event.children.filter(({ type }) => type === 'SOUR');
 
   return {
+    id: randomUUID(),
     type: event.type,
     date: date ? date.data.value : '',
     normalizedDate: date ? normalizeDate(date.data.value) : undefined,

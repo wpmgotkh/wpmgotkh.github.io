@@ -14,22 +14,59 @@ import {
   sexIcon,
 } from './lib.js';
 import { defunkifyPlace } from './lib/defunkifyPlace.js';
+import { nameAndBirth } from './lib/nameAndBirth.js';
 import { privatizeName } from './lib/privatizeName.js';
 
 const PAGES_DIR = './pages';
 const LINE_BREAK = '   ';
 
-const eventTypes = ['EDUC', 'OCCU', 'RESI'];
+const eventTypes = [
+  'BAPM',
+  'BARM',
+  'BASM',
+  'BLES',
+  'CENS',
+  'CHR',
+  'CHRA',
+  'CONF',
+  'EDUC',
+  'EMIG',
+  'GRAD',
+  'IMMI',
+  'NATU',
+  'OCCU',
+  'RESI',
+  'RETI',
+];
+const familyEventTypes = ['ANUL', 'ENGA', 'MARR', 'DIV', 'DIVF'];
 
 const urlify = (text) => text.toLowerCase().replace(/\s+/g, '-');
 
 const friendlyEventNames = {
+  ANUL: 'Annulment',
+  BAPM: 'Baptism',
+  BARM: 'Bar Mitzvah',
+  BASM: 'Bas Mitzvah',
   BIRT: 'Birth',
+  BLES: 'Blessing',
   BURI: 'Burial',
+  CENS: 'Census',
+  CHR: 'Christening',
+  CHRA: 'Christening (Adult)',
+  CONF: 'Confirmation',
   DEAT: 'Death',
+  DIV: 'Divorce',
+  DIVF: 'Divorce Filed',
   EDUC: 'Education',
+  EMIG: 'Emigration',
+  ENGA: 'Engagement',
+  GRAD: 'Graduation',
+  IMMI: 'Immigration',
+  MARR: 'Marriage',
+  NATU: 'Naturalization',
   OCCU: 'Occupation',
   RESI: 'Residence',
+  RETI: 'Retirement',
 };
 
 const getEventName = (eventType) => friendlyEventNames[eventType] || eventType;
@@ -64,26 +101,34 @@ function generateParentLine(tree, person) {
   return undefined;
 }
 
-function generateRelationships(tree, person) {
-  const families = person.children
+function findRelationships(person, tree) {
+  return person.children
     .filter(({ type }) => type === 'FAMS')
-    .map((family) => findFamily(tree, family.data.pointer))
-    .filter(Boolean);
+    .map((record) => {
+      const family = findFamily(tree, record.data.pointer);
 
+      const sp = findSpouse(tree, family, person.id);
+      const spouse = normalizePerson(tree, sp);
+
+      return { ...family, spouse, events: findFamilyEvents(family, tree) };
+    })
+    .filter(Boolean);
+}
+
+function findFamilyEvents(family, tree) {
+  return family.children
+    .filter(({ type }) => familyEventTypes.includes(type))
+    .map((event) => normalizeEvent(tree, event));
+}
+
+function generateRelationships(tree, person, families) {
   if (!families.length) return [];
 
   const lines = ['## 👩‍❤️‍👨 Relationships', LINE_BREAK];
 
   for (const family of families) {
-    const sp = findSpouse(tree, family, person.id);
-    const spouse = normalizePerson(tree, sp);
-
-    const events = family.children
-      .filter(({ type }) => ['MARR'].includes(type))
-      .map((event) => normalizeEvent(tree, event));
-
-    if (spouse) {
-      lines.push(`### ${sexIcon(spouse)} [${privatizeName(spouse)}](${spouse.url})`);
+    if (family.spouse) {
+      lines.push(`### ${sexIcon(family.spouse)} ${nameAndBirth(family.spouse)}`);
     } else {
       lines.push(`### ⚪ Unknown Person`);
     }
@@ -95,21 +140,31 @@ function generateRelationships(tree, person) {
       .map((child) => findPerson(tree, child.data.pointer))
       .map((child) => normalizePerson(tree, child));
 
-    if (!person.consideredLiving && (!spouse || !spouse.consideredLiving) && events.length) {
+    if (
+      !person.consideredLiving &&
+      (!family.spouse || !family.spouse.consideredLiving) &&
+      family.events.length
+    ) {
       lines.push('#### Events');
       lines.push('\n');
       lines.push(`Type | Date | Place`);
       lines.push(`------ | ------ | ------`);
 
-      for (const event of events) {
-        lines.push(`${getEventName(event.type)} | ${event.date} | ${defunkifyPlace(event.place)}`);
+      for (const event of family.events) {
+        const eventName = event.sources.length
+          ? `[${getEventName(event.type)}](#event-${event.id})`
+          : getEventName(event.type);
+
+        lines.push(`${eventName} | ${event.date} | ${defunkifyPlace(event.place)}`);
       }
     }
 
-    lines.push(`#### Children With ${privatizeName(spouse) ?? 'Unknown Person'}`);
+    if (children.length) {
+      lines.push(`#### Children With ${privatizeName(family.spouse) ?? 'Unknown Person'}`);
 
-    for (const child of children) {
-      lines.push(`* ${sexIcon(child)} [${privatizeName(child)}](${child.url})`);
+      for (const child of children) {
+        lines.push(`* ${sexIcon(child)} ${nameAndBirth(child)}`);
+      }
     }
   }
 
@@ -217,7 +272,7 @@ function processGedcom(inputFile) {
         const event = availableEvents[eventIndex];
 
         const eventName = event.sources.length
-          ? `[${getEventName(event.type)}](#event-${eventIndex})`
+          ? `[${getEventName(event.type)}](#event-${event.id})`
           : getEventName(event.type);
 
         documentLines.push(`${eventName} | ${event.date} | ${defunkifyPlace(event.place)}`);
@@ -226,23 +281,37 @@ function processGedcom(inputFile) {
       documentLines.push(LINE_BREAK);
     }
 
-    documentLines.push(...generateRelationships(tree, person));
+    const families = findRelationships(person, tree);
+
+    documentLines.push(...generateRelationships(tree, person, families));
 
     if (!person.consideredLiving || person.noteworthy) {
       documentLines.push(...generateNotes(tree, person));
     }
 
-    if (!person.consideredLiving && availableEvents.length) {
+    const familyEvents = person.consideredLiving
+      ? []
+      : families
+          .filter((family) => !family.spouse?.consideredLiving)
+          .map((family) => family.events)
+          .flat();
+
+    const sourcedEvents = [
+      ...availableEvents.filter((event) => event.sources.length),
+      ...familyEvents,
+    ].sort((a, b) =>
+      a.normalizedDate && b.normalizedDate ? a.normalizedDate.localeCompare(b.normalizedDate) : 0
+    );
+
+    if (!person.consideredLiving && sourcedEvents.length) {
       documentLines.push('### 📰 Event Sources');
       documentLines.push(LINE_BREAK);
 
-      for (let eventIndex = 0; eventIndex < availableEvents.length; eventIndex++) {
-        const event = availableEvents[eventIndex];
-
-        if (!event.sources.length) continue;
+      for (let eventIndex = 0; eventIndex < sourcedEvents.length; eventIndex++) {
+        const event = sourcedEvents[eventIndex];
 
         documentLines.push(
-          `#### <a id="event-${eventIndex}"></a> ${getEventName(event.type)}${
+          `#### <a id="event-${event.id}"></a> ${getEventName(event.type)}${
             event.date ? `, ${event.date}` : ''
           }`
         );
@@ -299,7 +368,7 @@ function processGedcom(inputFile) {
 
   generateSurnameIndex(surnameMap, top10Surnames);
 
-  fs.writeFileSync('tmp/names.json', JSON.stringify(nameIndex), 'utf-8');
+  fs.writeFileSync('pages/names.json', JSON.stringify(nameIndex), 'utf-8');
 
   spinner.succeed('Generated surname index!');
   spinner.succeed('Done!');

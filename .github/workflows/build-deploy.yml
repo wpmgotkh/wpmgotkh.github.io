@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install and Build 🔧
+      - name: Install and Build
         run: |
           npm ci
           npm run generate:html
