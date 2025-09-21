@@ -11,7 +11,7 @@ export default function (eleventyConfig) {
   eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(alert));
 
   eleventyConfig.addPassthroughCopy({
-    'tmp/names.json': 'names.json',
+    'pages/names.json': 'names.json',
     'src/assets/js': 'assets/js',
   });
 
