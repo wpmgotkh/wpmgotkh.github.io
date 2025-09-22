@@ -12,10 +12,10 @@ import {
   normalizeNotes,
   normalizePerson,
   sexIcon,
-} from './lib.js';
-import { defunkifyPlace } from './lib/defunkifyPlace.js';
-import { nameAndBirth } from './lib/nameAndBirth.js';
-import { privatizeName } from './lib/privatizeName.js';
+} from './src/lib.js';
+import { defunkifyPlace } from './src/lib/defunkifyPlace.js';
+import { nameAndBirth } from './src/lib/nameAndBirth.js';
+import { privatizeName } from './src/lib/privatizeName.js';
 
 const PAGES_DIR = './pages';
 const LINE_BREAK = '   ';
