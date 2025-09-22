@@ -3,9 +3,8 @@ import { parse as parseGedcom } from 'gedcom';
 import ora from 'ora';
 import path from 'path';
 import {
-  findFamily,
-  findNotes,
-  findPerson,
+  findRecord,
+  findRecords,
   findSpouse,
   getSex,
   normalizeEvent,
@@ -75,18 +74,26 @@ function generateParentLine(tree, person) {
   const sex = getSex(person);
 
   const birthFamilyId = person.children.find(({ type }) => type === 'FAMC');
-  const birthFamily = findFamily(tree, birthFamilyId?.data.pointer);
+  const birthFamily = findRecord(tree, 'FAM', birthFamilyId?.data.pointer);
   const mother =
     birthFamily &&
     normalizePerson(
       tree,
-      findPerson(tree, birthFamily.children.find(({ type }) => type === 'WIFE')?.data.pointer)
+      findRecord(
+        tree,
+        'INDI',
+        birthFamily.children.find(({ type }) => type === 'WIFE')?.data.pointer
+      )
     );
   const father =
     birthFamily &&
     normalizePerson(
       tree,
-      findPerson(tree, birthFamily.children.find(({ type }) => type === 'HUSB')?.data.pointer)
+      findRecord(
+        tree,
+        'INDI',
+        birthFamily.children.find(({ type }) => type === 'HUSB')?.data.pointer
+      )
     );
 
   if (mother?.id || father?.id) {
@@ -105,7 +112,7 @@ function findRelationships(person, tree) {
   return person.children
     .filter(({ type }) => type === 'FAMS')
     .map((record, index) => {
-      const family = findFamily(tree, record.data.pointer);
+      const family = findRecord(tree, 'FAM', record.data.pointer);
 
       const sp = findSpouse(tree, family, person.id);
       const spouse = normalizePerson(tree, sp);
@@ -137,7 +144,7 @@ function generateRelationships(tree, person, families) {
 
     const children = family.children
       .filter(({ type }) => type === 'CHIL')
-      .map((child) => findPerson(tree, child.data.pointer))
+      .map((child) => findRecord(tree, 'INDI', child.data.pointer))
       .map((child) => normalizePerson(tree, child));
 
     if (
@@ -172,7 +179,7 @@ function generateRelationships(tree, person, families) {
 }
 
 function generateNotes(tree, person) {
-  const notes = normalizeNotes(tree, findNotes(person));
+  const notes = normalizeNotes(tree, findRecords(person, 'NOTE'));
 
   if (!notes.length) return [];
 

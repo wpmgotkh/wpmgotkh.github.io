@@ -1,12 +1,6 @@
 import { normalizeDate } from './lib/normalizeDate.js';
 import { shouldConsiderPersonLiving } from './lib/shouldConsiderPersonLiving.js';
 
-export const findFamily = (tree, id) => {
-  if (!id) return id;
-
-  return tree.children.find(({ type, data }) => type === 'FAM' && data.xref_id === id);
-};
-
 export const getSex = (person) =>
   person.children.find(({ type }) => type === 'SEX').data.value.toUpperCase();
 
@@ -17,16 +11,7 @@ export const sexIcon = (person) =>
 export const findRecord = (tree, tag, id) =>
   tree.children.find(({ type, data }) => type === tag && data.xref_id === id);
 
-export const findPerson = (tree, id) =>
-  tree.children.find(({ type, data }) => type === 'INDI' && data.xref_id === id);
-
-export const findNotes = (tree) => tree.children.filter(({ type }) => type === 'NOTE');
-
-export const findNote = (tree, id) =>
-  tree.children.find(({ type, data }) => type === 'NOTE' && data.xref_id === id);
-
-export const findSource = (tree, id) =>
-  tree.children.find(({ type, data }) => type === 'SOUR' && data.xref_id === id);
+export const findRecords = (tree, tag) => tree.children.filter(({ type }) => type === tag);
 
 export const personName = (person) => {
   if (!person) return person;
@@ -61,7 +46,7 @@ export const getCitationPage = (citation) =>
 
 export const normalizeCitations = (tree, citations) => {
   return citations.map((citation) => {
-    const source = findSource(tree, citation.data.pointer);
+    const source = findRecord(tree, 'SOUR', citation.data.pointer);
     const name =
       source.children.find(({ type }) => type === 'TITL') ??
       source.children.find(({ type }) => type === 'PERI');
@@ -79,7 +64,9 @@ export const normalizeCitations = (tree, citations) => {
 };
 
 export const normalizeNotes = (tree, notes) => {
-  return notes.map(({ data }) => findNote(tree, data.pointer)?.data.value).filter(Boolean);
+  return notes
+    .map(({ data }) => findRecord(tree, 'NOTE', data.pointer)?.data.value)
+    .filter(Boolean);
 };
 
 export const findSpouse = (tree, family, personId) => {
@@ -89,7 +76,7 @@ export const findSpouse = (tree, family, personId) => {
 
   if (!spouseRef) return undefined;
 
-  return findPerson(tree, spouseRef.data.pointer);
+  return findRecord(tree, 'INDI', spouseRef.data.pointer);
 };
 
 export function normalizePerson(tree, person) {
