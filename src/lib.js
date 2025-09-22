@@ -1,12 +1,11 @@
+import { findValue } from './lib/findValue.js';
 import { normalizeDate } from './lib/normalizeDate.js';
 import { shouldConsiderPersonLiving } from './lib/shouldConsiderPersonLiving.js';
+import { upper } from './lib/upper.js';
 
-export const getSex = (person) =>
-  person.children.find(({ type }) => type === 'SEX').data.value.toUpperCase();
-
-export const sexIcon = (person) =>
-  // TODO: remove getSex() call when all normalized
-  (person.sex ?? getSex(person)) === 'F' ? '🟣' : '🔵';
+export const sexIcon = (person) => {
+  return person.sex === 'F' ? '🟣' : '🔵';
+};
 
 export const findRecord = (tree, tag, id) =>
   tree.children.find(({ type, data }) => type === tag && data.xref_id === id);
@@ -100,7 +99,7 @@ export function normalizePerson(tree, person) {
   normalizedPerson.prettyId = prettyId;
   normalizedPerson.url = `/people/${prettyId.substr(0, 1)}/${prettyId}`;
 
-  normalizedPerson.sex = getSex(person);
+  normalizedPerson.sex = upper(findValue(person, 'SEX'));
   normalizedPerson.name = {
     given,
     surname,

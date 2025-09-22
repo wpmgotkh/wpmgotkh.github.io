@@ -6,7 +6,6 @@ import {
   findRecord,
   findRecords,
   findSpouse,
-  getSex,
   normalizeEvent,
   normalizeNotes,
   normalizePerson,
@@ -71,8 +70,6 @@ const friendlyEventNames = {
 const getEventName = (eventType) => friendlyEventNames[eventType] || eventType;
 
 function generateParentLine(tree, person) {
-  const sex = getSex(person);
-
   const birthFamilyId = person.children.find(({ type }) => type === 'FAMC');
   const birthFamily = findRecord(tree, 'FAM', birthFamilyId?.data.pointer);
   const mother =
@@ -102,7 +99,9 @@ function generateParentLine(tree, person) {
       mother?.id && `[${privatizeName(mother)}](${mother.url})`,
     ];
 
-    return `${sex === 'M' ? 'Son' : 'Daughter'} of ${parentLinks.filter(Boolean).join(' and ')}`;
+    return `${person.sex === 'M' ? 'Son' : 'Daughter'} of ${parentLinks
+      .filter(Boolean)
+      .join(' and ')}`;
   }
 
   return undefined;
