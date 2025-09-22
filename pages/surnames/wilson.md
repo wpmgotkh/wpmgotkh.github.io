@@ -40,6 +40,7 @@ title: Wilson Names
 - [Mary Estelle Wilson](/people/4/46787428), 23 APR 1881
 - [Mary Jane Wilson](/people/6/68306241), 1850
 - [Phebe J. Wilson](/people/9/96493800), about 1855
+- [Phillip F Wilson](/people/4/42836476), 23 JUL 1905
 - [Polly Ann Wilson](/people/9/97244328), abt 1853
 - [Raymond Eugene Wilson](/people/8/81165742), about 1895
 - [Ryan Allen Wilson](/people/2/24746046), 11 MAR 1995

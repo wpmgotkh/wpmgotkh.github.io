@@ -9,7 +9,7 @@ These are people somewhere in the tree who are famous or otherwise noteworthy.
  - [John Ellis Bush](/people/8/82675226), 11 FEB 1953
  - [Jenna Welch Bush](/people/8/82743343), 25 NOV 1981
 ## Top 10 Surnames
- - [Wilson](/surnames/wilson) (42)
+ - [Wilson](/surnames/wilson) (43)
  - [Kobel](/surnames/kobel) (42)
  - [Geelhoed](/surnames/geelhoed) (33)
  - [Munger](/surnames/munger) (33)

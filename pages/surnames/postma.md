@@ -6,14 +6,14 @@ title: Postma Names
 - [Anna Postma](/people/9/95174357), 26 SEP 1890
 - [Charles J. Postma](/people/6/66045536), 10 JUL 1909
 - [Clara Postma](/people/3/37775298), 06 NOV 1906
-- [Dewey Postma](/people/2/23665755), 11 JUL 1904
+- [Dewey Postma](/people/2/23665755), 01 JUN 1905
 - [Einte Wolters Postma](/people/1/18880768), 1795
 - [Grietje Wolters Postma](/people/1/16677181), about 1798
 - [Hendrik Jakob Postma](/people/3/31727152), 27 FEB 1859
 - [Henry Cornelius Postma](/people/2/26394076), 15 MAR 1930
 - [Ida Clara Postma](/people/5/59695695), 27 NOV 1926
 - [Iebele Eintes Postma](/people/6/62935454), 21 JUL 1833
-- [Jacob Postma](/people/3/39791641), 12 OCT 1895
+- [Jacob Postma](/people/3/39791641), 12 OCT 1896
 - [Jakob Eintes Postma](/people/4/46630400), 21 AUG 1827
 - [Jeltje Wolters Postma](/people/2/28342558), about 1803
 - [Jennie Postma](/people/5/53448440), 17 MAY 1894
