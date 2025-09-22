@@ -2,41 +2,21 @@ import fs from 'fs';
 import { parse as parseGedcom } from 'gedcom';
 import ora from 'ora';
 import path from 'path';
+import { eventTypes } from './src/lib/const.js';
 import { defunkifyPlace } from './src/lib/defunkifyPlace.js';
 import { findRecord } from './src/lib/findRecord.js';
 import { findRecords } from './src/lib/findRecords.js';
-import { findSpouse } from './src/lib/findSpouse.js';
+import { urlify } from './src/lib/generator/urlify.js';
 import { nameAndBirth } from './src/lib/nameAndBirth.js';
 import { normalizeEvent } from './src/lib/normalizeEvent.js';
 import { normalizeNotes } from './src/lib/normalizeNotes.js';
 import { normalizePerson } from './src/lib/normalizePerson.js';
+import { findRelationships } from './src/lib/parser/findRelationships.js';
 import { privatizeName } from './src/lib/privatizeName.js';
 import { sexIcon } from './src/lib/sexIcon.js';
 
 const PAGES_DIR = './pages';
 const LINE_BREAK = '   ';
-
-const eventTypes = [
-  'BAPM',
-  'BARM',
-  'BASM',
-  'BLES',
-  'CENS',
-  'CHR',
-  'CHRA',
-  'CONF',
-  'EDUC',
-  'EMIG',
-  'GRAD',
-  'IMMI',
-  'NATU',
-  'OCCU',
-  'RESI',
-  'RETI',
-];
-const familyEventTypes = ['ANUL', 'ENGA', 'MARR', 'DIV', 'DIVF'];
-
-const urlify = (text) => text.toLowerCase().replace(/\s+/g, '-');
 
 const friendlyEventNames = {
   ANUL: 'Annulment',
@@ -103,26 +83,6 @@ function generateParentLine(tree, person) {
   }
 
   return undefined;
-}
-
-function findRelationships(person, tree) {
-  return person.children
-    .filter(({ type }) => type === 'FAMS')
-    .map((record, index) => {
-      const family = findRecord(tree, 'FAM', record.data.pointer);
-
-      const sp = findSpouse(tree, family, person.id);
-      const spouse = normalizePerson(tree, sp);
-
-      return { ...family, spouse, events: findFamilyEvents(family, tree, `family-${index}`) };
-    })
-    .filter(Boolean);
-}
-
-function findFamilyEvents(family, tree, idPrefix) {
-  return family.children
-    .filter(({ type }) => familyEventTypes.includes(type))
-    .map((event, index) => normalizeEvent(tree, event, `${idPrefix}-event-${index}`));
 }
 
 function generateRelationships(tree, person, families) {
