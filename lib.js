@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { normalizeDate } from './lib/normalizeDate.js';
 import { shouldConsiderPersonLiving } from './lib/shouldConsiderPersonLiving.js';
 
@@ -38,8 +37,9 @@ export const personName = (person) => {
   return { given, surname };
 };
 
-export const normalizeEvent = (tree, event) => {
+export const normalizeEvent = (tree, event, id) => {
   if (!event) return event;
+  if (!id) throw new Error('Event ID is required');
 
   const date = event.children.find(({ type }) => type === 'DATE');
   const place = event.children.find(({ type }) => type === 'PLAC');
@@ -47,7 +47,7 @@ export const normalizeEvent = (tree, event) => {
   const sources = event.children.filter(({ type }) => type === 'SOUR');
 
   return {
-    id: randomUUID(),
+    id: id,
     type: event.type,
     date: date ? date.data.value : '',
     normalizedDate: date ? normalizeDate(date.data.value) : undefined,
@@ -128,19 +128,13 @@ export function normalizePerson(tree, person) {
     );
 
   // TODO: FIXME: handle multiple
+  const birthIndex = person.children.findIndex(({ type }) => type === 'BIRT');
+  const deathIndex = person.children.findIndex(({ type }) => type === 'DEAT');
+  const burialIndex = person.children.findIndex(({ type }) => type === 'BURI');
 
-  const birth = normalizeEvent(
-    tree,
-    person.children.find(({ type }) => type === 'BIRT')
-  );
-  const death = normalizeEvent(
-    tree,
-    person.children.find(({ type }) => type === 'DEAT')
-  );
-  const burial = normalizeEvent(
-    tree,
-    person.children.find(({ type }) => type === 'BURI')
-  );
+  const birth = normalizeEvent(tree, person.children[birthIndex], `event-${birthIndex}`);
+  const death = normalizeEvent(tree, person.children[deathIndex], `event-${deathIndex}`);
+  const burial = normalizeEvent(tree, person.children[burialIndex], `event-${burialIndex}`);
 
   normalizedPerson.events.birth = birth ? [birth] : [];
   normalizedPerson.events.death = death ? [death] : [];

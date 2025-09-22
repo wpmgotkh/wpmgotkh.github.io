@@ -104,21 +104,21 @@ function generateParentLine(tree, person) {
 function findRelationships(person, tree) {
   return person.children
     .filter(({ type }) => type === 'FAMS')
-    .map((record) => {
+    .map((record, index) => {
       const family = findFamily(tree, record.data.pointer);
 
       const sp = findSpouse(tree, family, person.id);
       const spouse = normalizePerson(tree, sp);
 
-      return { ...family, spouse, events: findFamilyEvents(family, tree) };
+      return { ...family, spouse, events: findFamilyEvents(family, tree, `family-${index}`) };
     })
     .filter(Boolean);
 }
 
-function findFamilyEvents(family, tree) {
+function findFamilyEvents(family, tree, idPrefix) {
   return family.children
     .filter(({ type }) => familyEventTypes.includes(type))
-    .map((event) => normalizeEvent(tree, event));
+    .map((event, index) => normalizeEvent(tree, event, `${idPrefix}-event-${index}`));
 }
 
 function generateRelationships(tree, person, families) {
@@ -254,7 +254,7 @@ function processGedcom(inputFile) {
 
     const otherEvents = person.children
       .filter(({ type }) => eventTypes.includes(type))
-      .map((event) => normalizeEvent(tree, event));
+      .map((event, index) => normalizeEvent(tree, event, `event-${index}`));
 
     events.push(...otherEvents);
 
