@@ -2,18 +2,16 @@ import fs from 'fs';
 import { parse as parseGedcom } from 'gedcom';
 import ora from 'ora';
 import path from 'path';
-import {
-  findRecord,
-  findRecords,
-  findSpouse,
-  normalizeEvent,
-  normalizeNotes,
-  normalizePerson,
-  sexIcon,
-} from './src/lib.js';
 import { defunkifyPlace } from './src/lib/defunkifyPlace.js';
+import { findRecord } from './src/lib/findRecord.js';
+import { findRecords } from './src/lib/findRecords.js';
+import { findSpouse } from './src/lib/findSpouse.js';
 import { nameAndBirth } from './src/lib/nameAndBirth.js';
+import { normalizeEvent } from './src/lib/normalizeEvent.js';
+import { normalizeNotes } from './src/lib/normalizeNotes.js';
+import { normalizePerson } from './src/lib/normalizePerson.js';
 import { privatizeName } from './src/lib/privatizeName.js';
+import { sexIcon } from './src/lib/sexIcon.js';
 
 const PAGES_DIR = './pages';
 const LINE_BREAK = '   ';
