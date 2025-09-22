@@ -7,6 +7,7 @@ import { nameAndBirth } from './src/lib/generator/nameAndBirth.js';
 import { privatizeName } from './src/lib/generator/privatizeName.js';
 import { sexIcon } from './src/lib/generator/sexIcon.js';
 import { urlify } from './src/lib/generator/urlify.js';
+import { ageAtEvent } from './src/lib/parser/ageAtEvent.js';
 import { defunkifyPlace } from './src/lib/parser/defunkifyPlace.js';
 import { findRecord } from './src/lib/parser/findRecord.js';
 import { findRecords } from './src/lib/parser/findRecords.js';
@@ -111,15 +112,16 @@ function generateRelationships(tree, person, families) {
     ) {
       lines.push('#### Events');
       lines.push('\n');
-      lines.push(`Type | Date | Place`);
-      lines.push(`------ | ------ | ------`);
+      lines.push(`Type | Date | Age at Event | Place`);
+      lines.push(`------ | ------ | ------ | ------`);
 
       for (const event of family.events) {
         const eventName = event.sources.length
           ? `[${getEventName(event.type)}](#event-${event.id})`
           : getEventName(event.type);
+        const age = event.date ? ageAtEvent(person, event.date) : '';
 
-        lines.push(`${eventName} | ${event.date} | ${defunkifyPlace(event.place)}`);
+        lines.push(`${eventName} | ${event.date} | ${age} | ${defunkifyPlace(event.place)}`);
       }
     }
 
@@ -181,6 +183,8 @@ function processGedcom(inputFile) {
       noteworthy.push(snapshot);
     }
 
+    const deathDate = person.events.death?.[0]?.date;
+
     const documentLines = [
       '---',
       'layout: templates/basic.njk',
@@ -188,6 +192,11 @@ function processGedcom(inputFile) {
       '---',
     ];
     documentLines.push(`## ${sexIcon(person)} ${privatizeName(person)}`);
+    if (deathDate) {
+      documentLines.push(
+        `<small>Age: ${ageAtEvent(person, person.events.death?.[0]?.date)}</small>`
+      );
+    }
     documentLines.push(LINE_BREAK);
 
     const parentLine = generateParentLine(tree, person);
@@ -229,8 +238,8 @@ function processGedcom(inputFile) {
     if (!person.consideredLiving && availableEvents.length) {
       documentLines.push('### 📆 Events');
       documentLines.push('\n');
-      documentLines.push(`Type | Date | Place`);
-      documentLines.push(`------ | ------ | ------`);
+      documentLines.push(`Type | Date | Age at Event | Place`);
+      documentLines.push(`------ | ------ | ------ | ------`);
 
       for (let eventIndex = 0; eventIndex < availableEvents.length; eventIndex++) {
         const event = availableEvents[eventIndex];
@@ -238,8 +247,11 @@ function processGedcom(inputFile) {
         const eventName = event.sources.length
           ? `[${getEventName(event.type)}](#event-${event.id})`
           : getEventName(event.type);
+        const age = event.date ? ageAtEvent(person, event.date) : '';
 
-        documentLines.push(`${eventName} | ${event.date} | ${defunkifyPlace(event.place)}`);
+        documentLines.push(
+          `${eventName} | ${event.date} | ${age} | ${defunkifyPlace(event.place)}`
+        );
       }
 
       documentLines.push(LINE_BREAK);
