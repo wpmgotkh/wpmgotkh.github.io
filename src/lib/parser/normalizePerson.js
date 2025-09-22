@@ -1,8 +1,8 @@
+import { upper } from '../upper.js';
 import { findRecord } from './findRecord.js';
 import { findValue } from './findValue.js';
 import { normalizeEvent } from './normalizeEvent.js';
 import { shouldConsiderPersonLiving } from './shouldConsiderPersonLiving.js';
-import { upper } from './upper.js';
 
 export function normalizePerson(tree, person) {
   if (!person) return person;

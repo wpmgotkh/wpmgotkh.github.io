@@ -1,8 +1,8 @@
 import { familyEventTypes } from '../const.js';
-import { findRecord } from '../findRecord.js';
-import { findSpouse } from '../findSpouse.js';
-import { normalizeEvent } from '../normalizeEvent.js';
-import { normalizePerson } from '../normalizePerson.js';
+import { findRecord } from './findRecord.js';
+import { findSpouse } from './findSpouse.js';
+import { normalizeEvent } from './normalizeEvent.js';
+import { normalizePerson } from './normalizePerson.js';
 
 export function findRelationships(person, tree) {
   return person.children

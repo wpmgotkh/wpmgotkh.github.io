@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { shouldConsiderPersonLiving } from './shouldConsiderPersonLiving';
+import { shouldConsiderPersonLiving } from '../shouldConsiderPersonLiving';
 
 test('consider everyone alive by default', () => {
   const tree = {
