@@ -111,7 +111,8 @@ function generateRelationships(tree, person, families) {
       family.events.length
     ) {
       lines.push('#### Events');
-      lines.push('\n');
+      lines.push(LINE_BREAK);
+      lines.push('{% block "hidden md:block" %}');
       lines.push(`Type | Date | Age at Event | Place`);
       lines.push(`------ | ------ | ------ | ------`);
 
@@ -123,6 +124,27 @@ function generateRelationships(tree, person, families) {
 
         lines.push(`${eventName} | ${event.date} | ${age} | ${defunkifyPlace(event.place)}`);
       }
+
+      lines.push('{% endblock %}');
+      lines.push(LINE_BREAK);
+
+      // AND AGAIN for mobile layout
+      lines.push('{% block "md:hidden" %}');
+
+      for (const event of family.events) {
+        const eventName = event.sources.length
+          ? `[${getEventName(event.type)}](#event-${event.id})`
+          : getEventName(event.type);
+        const age = event.date ? `, Age: ${ageAtEvent(person, event.date)}` : '';
+
+        lines.push(`- **${eventName}** `);
+        lines.push(`  **Date**: ${event.date}${age}`);
+        lines.push(`  **Place**: ${defunkifyPlace(event.place)}`);
+      }
+
+      lines.push('{% endblock %}');
+
+      lines.push(LINE_BREAK);
     }
 
     if (children.length) {
@@ -237,13 +259,12 @@ function processGedcom(inputFile) {
 
     if (!person.consideredLiving && availableEvents.length) {
       documentLines.push('### 📆 Events');
-      documentLines.push('\n');
+      documentLines.push(LINE_BREAK);
+      documentLines.push('{% block "hidden md:block" %}');
       documentLines.push(`Type | Date | Age at Event | Place`);
       documentLines.push(`------ | ------ | ------ | ------`);
 
-      for (let eventIndex = 0; eventIndex < availableEvents.length; eventIndex++) {
-        const event = availableEvents[eventIndex];
-
+      for (const event of availableEvents) {
         const eventName = event.sources.length
           ? `[${getEventName(event.type)}](#event-${event.id})`
           : getEventName(event.type);
@@ -254,6 +275,24 @@ function processGedcom(inputFile) {
         );
       }
 
+      documentLines.push('{% endblock %}');
+      documentLines.push(LINE_BREAK);
+
+      // AND AGAIN for mobile layout
+      documentLines.push('{% block "md:hidden" %}');
+
+      for (const event of availableEvents) {
+        const eventName = event.sources.length
+          ? `[${getEventName(event.type)}](#event-${event.id})`
+          : getEventName(event.type);
+        const age = event.date ? `, Age: ${ageAtEvent(person, event.date)}` : '';
+
+        documentLines.push(`- **${eventName}** `);
+        documentLines.push(`  **Date**: ${event.date}${age}`);
+        documentLines.push(`  **Place**: ${defunkifyPlace(event.place)}`);
+      }
+
+      documentLines.push('{% endblock %}');
       documentLines.push(LINE_BREAK);
     }
 

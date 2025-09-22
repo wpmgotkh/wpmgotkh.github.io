@@ -1,13 +1,20 @@
-import fs from 'fs';
-import path from 'path';
-
 import tailwindcss from '@tailwindcss/postcss';
 import cssnano from 'cssnano';
+import fs from 'fs';
+import MarkdownIt from 'markdown-it';
+import path from 'path';
 import postcss from 'postcss';
 
 import { alert } from '@mdit/plugin-alert';
 
+const markdownIt = new MarkdownIt({
+  html: true,
+  linkify: true,
+  breaks: true,
+});
+
 export default function (eleventyConfig) {
+  eleventyConfig.setLibrary('md', markdownIt);
   eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(alert));
 
   eleventyConfig.addPassthroughCopy({
@@ -33,6 +40,10 @@ export default function (eleventyConfig) {
     });
 
     fs.writeFileSync(tailwindOutputPath, result.css);
+  });
+
+  eleventyConfig.addPairedShortcode('block', (content, classes = '') => {
+    return `<div class="${classes}">${markdownIt.render(content)}</div>`;
   });
 
   const processor = postcss([
