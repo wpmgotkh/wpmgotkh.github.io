@@ -9,15 +9,15 @@ These are people somewhere in the tree who are famous or otherwise noteworthy.
  - [John Ellis Bush](/people/8/82675226), 11 FEB 1953
  - [Jenna Welch Bush](/people/8/82743343), 25 NOV 1981
 ## Top 10 Surnames
- - [Wilson](/surnames/wilson) (43)
- - [Kobel](/surnames/kobel) (42)
+ - [Wilson](/surnames/wilson) (44)
+ - [Kobel](/surnames/kobel) (43)
  - [Geelhoed](/surnames/geelhoed) (33)
  - [Munger](/surnames/munger) (33)
  - [Terrell](/surnames/terrell) (31)
  - [Wilmot](/surnames/wilmot) (31)
  - [Terrill](/surnames/terrill) (31)
- - [Postma](/surnames/postma) (26)
- - [Conant](/surnames/conant) (23)
+ - [Postma](/surnames/postma) (27)
+ - [Conant](/surnames/conant) (24)
  - [Willard](/surnames/willard) (22)
 
 

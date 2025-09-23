@@ -4,3 +4,4 @@ title: Maat Names
 ---
 ## Maat Names
 - [Annighien Pieters Maat](/people/7/7249878), 20 FEB 1824
+- [Pieter Jans Maat](/people/7/79488014)

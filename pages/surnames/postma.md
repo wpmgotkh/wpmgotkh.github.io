@@ -28,4 +28,5 @@ title: Postma Names
 - [Theodore Postma](/people/2/25196824), 20 MAY 1901
 - [Tjipke Eintes Postma](/people/9/98204460), 03 OCT 1829
 - [Wolter Eintes Postma](/people/7/78693659), 05 AUG 1825
+- [Wolter Wolters Postma](/people/2/26527652)
 - [Wytze Wolters Postma](/people/6/61192664), about 1811

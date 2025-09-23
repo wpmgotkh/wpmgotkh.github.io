@@ -24,5 +24,6 @@ title: Conant Names
 - [Robert J. Conant](/people/7/75124444), about 1896
 - [Sarah Ann Conant](/people/3/3929404), June 1834
 - [Sylvia Mabel Conant](/people/8/88275832), 11 JUN 1867
+- [Truman A. Conant](/people/6/67469728)
 - [Vernon Conant](/people/1/15985527), 14 MAY 1902
 - [Wanda Conant](/people/3/3340870), Nov 1891

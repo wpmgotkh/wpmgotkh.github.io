@@ -7,6 +7,7 @@ title: Dunkelberger Names
 - [Catherine Dunkelberger](/people/1/19744824), about 1740
 - [Christopher Dunkelberger](/people/8/88832375), about 1749
 - [Clement Dunkelberger](/people/7/75287884), about 1752
+- [Clement Dunkelberger](/people/1/13545057)
 - [Dorthea Dunkelberger](/people/5/56682191), about 1758
 - [Frederick Dunkelberger](/people/2/29307544), 24 APR 1747
 - [Johannes Jacob Dunkelberger](/people/3/3659869), 08 OCT 1744

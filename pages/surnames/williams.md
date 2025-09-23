@@ -10,6 +10,7 @@ title: Williams Names
 - [Lucy Williams](/people/3/30981683), 26 APR 1764
 - [Rhoda Williams](/people/2/220352), 17 APR 1767
 - [Samuel Warner Williams](/people/2/2994960), 11 MAY 1772
+- [Samuel Williams](/people/5/55971024)
 - [Samuel Williams](/people/9/90108080), Jun 1700
 - [Samuel Williams](/people/6/659680), 09 SEP 1753
 - [Sibbel Williams](/people/6/60503451), 02 OCT 1769

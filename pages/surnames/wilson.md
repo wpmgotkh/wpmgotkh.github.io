@@ -29,6 +29,7 @@ title: Wilson Names
 - [Hiram Wilson](/people/5/58050398), about 1853
 - [James E. Wilson](/people/5/54950695), 11 APR 1856
 - [James Wilson](/people/1/17213544), 1905
+- [Joseph Earl Wilson](/people/3/35616804), 03 JUL 1906
 - [Joseph Evart Wilson](/people/5/57306025), May 1871
 - [Joy Dawn Wilson](/people/2/29575132), 13 JAN 1930
 - [Judith Ann Wilson](/people/5/50745588), 05 OCT 1940

@@ -17,4 +17,5 @@ title: Holloway Names
 - [Nellie May Holloway](/people/1/18968776), 23 FEB 1877
 - [Rose Anna Holloway](/people/2/26212000), 31 AUG 1871
 - [Samuel Holloway](/people/6/61320261), about 1801
+- [Thomas Holloway](/people/9/99720622)
 - [William Riley Holloway](/people/9/90949012), 13 MAY 1845

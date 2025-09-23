@@ -52,10 +52,11 @@ export function normalizePerson(tree, person) {
   normalizedPerson.events.death = death ? [death] : [];
   normalizedPerson.events.burial = burial ? [burial] : [];
 
-  normalizedPerson.consideredLiving = shouldConsiderPersonLiving(tree, normalizedPerson);
-
   // FIXME: deprecate this
+  // this is needed by shouldConsiderPersonLiving
   normalizedPerson.children = person.children;
+
+  normalizedPerson.consideredLiving = shouldConsiderPersonLiving(tree, normalizedPerson);
 
   return normalizedPerson;
 }

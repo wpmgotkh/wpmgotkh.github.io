@@ -3,6 +3,7 @@ layout: templates/basic.njk
 title: van den Berge Names
 ---
 ## van den Berge Names
+- [Abraham van den Berge](/people/7/78829556)
 - [Cornelis van den Berge](/people/7/76669736), 1814
 - [Dingeman van den Berge](/people/2/24832747), abt 1844
 - [Hendrika van den Berge](/people/5/54004146), abt 1842

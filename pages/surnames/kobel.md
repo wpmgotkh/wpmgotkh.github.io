@@ -31,6 +31,7 @@ title: Kobel Names
 - [Joseph Kobel](/people/4/44694656), 06 JUL 1841
 - [June Pauline Kobel](/people/4/43589122), 14 APR 1922
 - [Kenneth Kobel](/people/4/44916336), 1941
+- [Klaus Kobel](/people/4/46655036)
 - [Kobel](/people/4/43995845), 16 NOV 1902
 - [Kobel](/people/7/71908748), 29 JAN 1909
 - [Kobel](/people/2/22427094), 12 FEB 1834
