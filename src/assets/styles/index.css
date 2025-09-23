@@ -23,3 +23,16 @@
 .prosey {
   @apply prose dark:prose-invert w-full max-w-full;
 }
+
+pre.mermaid:not([data-processed='true']) {
+  display: none;
+}
+
+pre.mermaid {
+  background-color: transparent;
+}
+
+pre.mermaid a,
+pre.mermaid a:visited {
+  color: #fff;
+}

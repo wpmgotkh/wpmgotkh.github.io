@@ -1,11 +1,11 @@
+import pluginMermaid from '@kevingimbel/eleventy-plugin-mermaid';
+import { alert } from '@mdit/plugin-alert';
 import tailwindcss from '@tailwindcss/postcss';
 import cssnano from 'cssnano';
 import fs from 'fs';
 import MarkdownIt from 'markdown-it';
 import path from 'path';
 import postcss from 'postcss';
-
-import { alert } from '@mdit/plugin-alert';
 
 const markdownIt = new MarkdownIt({
   html: true,
@@ -16,6 +16,8 @@ const markdownIt = new MarkdownIt({
 export default function (eleventyConfig) {
   eleventyConfig.setLibrary('md', markdownIt);
   eleventyConfig.amendLibrary('md', (mdLib) => mdLib.use(alert));
+
+  eleventyConfig.addPlugin(pluginMermaid);
 
   eleventyConfig.addPassthroughCopy({
     'pages/names.json': 'names.json',

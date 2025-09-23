@@ -3,12 +3,14 @@ import { parse as parseGedcom } from 'gedcom';
 import ora from 'ora';
 import path from 'path';
 import { eventTypes } from './src/lib/const.js';
+import { generateTreeDiagram } from './src/lib/generator/generateTreeDiagram.js';
 import { nameAndBirth } from './src/lib/generator/nameAndBirth.js';
 import { privatizeName } from './src/lib/generator/privatizeName.js';
 import { sexIcon } from './src/lib/generator/sexIcon.js';
 import { urlify } from './src/lib/generator/urlify.js';
 import { ageAtEvent } from './src/lib/parser/ageAtEvent.js';
 import { defunkifyPlace } from './src/lib/parser/defunkifyPlace.js';
+import { findParents } from './src/lib/parser/findParents.js';
 import { findRecord } from './src/lib/parser/findRecord.js';
 import { findRecords } from './src/lib/parser/findRecords.js';
 import { findRelationships } from './src/lib/parser/findRelationships.js';
@@ -49,28 +51,7 @@ const friendlyEventNames = {
 const getEventName = (eventType) => friendlyEventNames[eventType] || eventType;
 
 function generateParentLine(tree, person) {
-  const birthFamilyId = person.children.find(({ type }) => type === 'FAMC');
-  const birthFamily = findRecord(tree, 'FAM', birthFamilyId?.data.pointer);
-  const mother =
-    birthFamily &&
-    normalizePerson(
-      tree,
-      findRecord(
-        tree,
-        'INDI',
-        birthFamily.children.find(({ type }) => type === 'WIFE')?.data.pointer
-      )
-    );
-  const father =
-    birthFamily &&
-    normalizePerson(
-      tree,
-      findRecord(
-        tree,
-        'INDI',
-        birthFamily.children.find(({ type }) => type === 'HUSB')?.data.pointer
-      )
-    );
+  const { mother, father } = findParents(tree, person);
 
   if (mother?.id || father?.id) {
     const parentLinks = [
@@ -226,6 +207,10 @@ function processGedcom(inputFile) {
       documentLines.push(parentLine);
       documentLines.push(LINE_BREAK);
     }
+
+    documentLines.push(...generateTreeDiagram(tree, person));
+
+    documentLines.push(LINE_BREAK);
 
     if (person.noteworthy && person.consideredLiving) {
       documentLines.push(
