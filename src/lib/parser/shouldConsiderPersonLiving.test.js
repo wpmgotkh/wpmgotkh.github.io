@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest';
 import { createTree } from '../test/createTree.js';
 import { findRecord } from './findRecord.js';
+import { normalizePerson } from './normalizePerson.js';
 import { shouldConsiderPersonLiving } from './shouldConsiderPersonLiving.js';
 
 test('consider everyone alive by default', () => {
@@ -79,17 +80,10 @@ test('if children born > 100 years ago, consider them no longer living', () => {
     .addFamily('@F1@', { children: ['@CHILD1@', '@CHILD2@'] })
     .get();
 
-  // Note: we don't want to call normalizePerson() here as we'll end up calling
-  // shouldConsiderPersonLiving twice, which should be fine, but could be confusing
-  // on errors
-  const rootPerson = findRecord(myTree, 'INDI', '@DAD@');
+  const record = findRecord(myTree, 'INDI', '@DAD@');
+  const rootPerson = normalizePerson(myTree, record);
 
-  expect(
-    shouldConsiderPersonLiving(myTree, {
-      events: {},
-      children: rootPerson.children,
-    })
-  ).toBe(false);
+  expect(shouldConsiderPersonLiving(myTree, rootPerson)).toBe(false);
 });
 
 test('if children are born < 100 years ago, consider them living', () => {
@@ -104,15 +98,8 @@ test('if children are born < 100 years ago, consider them living', () => {
     .addFamily('@F1@', { children: ['@CHILD1@', '@CHILD2@'] })
     .get();
 
-  // Note: we don't want to call normalizePerson() here as we'll end up calling
-  // shouldConsiderPersonLiving twice, which should be fine, but could be confusing
-  // on errors
-  const rootPerson = findRecord(myTree, 'INDI', '@DAD@');
+  const record = findRecord(myTree, 'INDI', '@DAD@');
+  const rootPerson = normalizePerson(myTree, record);
 
-  expect(
-    shouldConsiderPersonLiving(myTree, {
-      events: {},
-      children: rootPerson.children,
-    })
-  ).toBe(true);
+  expect(shouldConsiderPersonLiving(myTree, rootPerson)).toBe(true);
 });

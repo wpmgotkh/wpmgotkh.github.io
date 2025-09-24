@@ -7,11 +7,7 @@ import { shouldConsiderPersonLiving } from './shouldConsiderPersonLiving.js';
 export function normalizePerson(tree, person) {
   if (!person) return person;
 
-  const normalizedPerson = {
-    events: {},
-    notes: [],
-    sources: [],
-  };
+  const normalizedPerson = {};
 
   const name = person.children.find(({ type }) => type === 'NAME');
   const given = name?.children.find(({ type }) => type === 'GIVN')?.data.value;
@@ -32,31 +28,53 @@ export function normalizePerson(tree, person) {
     full,
   };
 
-  normalizedPerson.noteworthy = person.children
-    .filter(({ type }) => type === 'LABL')
-    .map(({ data }) => findRecord(tree, 'LABL', data.pointer))
-    .find(
-      ({ children }) => children.find(({ type }) => type === 'TITL')?.data.value === 'Noteworthy'
-    );
-
-  // TODO: FIXME: handle multiple
-  const birthIndex = person.children.findIndex(({ type }) => type === 'BIRT');
-  const deathIndex = person.children.findIndex(({ type }) => type === 'DEAT');
-  const burialIndex = person.children.findIndex(({ type }) => type === 'BURI');
-
-  const birth = normalizeEvent(tree, person.children[birthIndex], `event-${birthIndex}`);
-  const death = normalizeEvent(tree, person.children[deathIndex], `event-${deathIndex}`);
-  const burial = normalizeEvent(tree, person.children[burialIndex], `event-${burialIndex}`);
-
-  normalizedPerson.events.birth = birth ? [birth] : [];
-  normalizedPerson.events.death = death ? [death] : [];
-  normalizedPerson.events.burial = burial ? [burial] : [];
-
-  // FIXME: deprecate this
-  // this is needed by shouldConsiderPersonLiving
   normalizedPerson.children = person.children;
 
-  normalizedPerson.consideredLiving = shouldConsiderPersonLiving(tree, normalizedPerson);
+  return new Proxy(normalizedPerson, {
+    get(target, prop, receiver) {
+      switch (prop) {
+        case 'events':
+          if (!('events' in target)) {
+            target.events = {};
+            // TODO: FIXME: handle multiple
+            const birthIndex = target.children.findIndex(({ type }) => type === 'BIRT');
+            const deathIndex = target.children.findIndex(({ type }) => type === 'DEAT');
+            const burialIndex = target.children.findIndex(({ type }) => type === 'BURI');
 
-  return normalizedPerson;
+            const birth = normalizeEvent(tree, target.children[birthIndex], `event-${birthIndex}`);
+            const death = normalizeEvent(tree, target.children[deathIndex], `event-${deathIndex}`);
+            const burial = normalizeEvent(
+              tree,
+              target.children[burialIndex],
+              `event-${burialIndex}`
+            );
+
+            target.events.birth = birth ? [birth] : [];
+            target.events.death = death ? [death] : [];
+            target.events.burial = burial ? [burial] : [];
+          }
+          return target.events;
+
+        case 'noteworthy':
+          if (!('noteworthy' in target)) {
+            target.noteworthy = target.children
+              .filter(({ type }) => type === 'LABL')
+              .map(({ data }) => findRecord(tree, 'LABL', data.pointer))
+              .find(
+                ({ children }) =>
+                  children.find(({ type }) => type === 'TITL')?.data.value === 'Noteworthy'
+              );
+          }
+          return target.noteworthy;
+
+        case 'consideredLiving':
+          if (!('consideredLiving' in target)) {
+            target.consideredLiving = shouldConsiderPersonLiving(tree, receiver);
+          }
+          return target.consideredLiving;
+      }
+
+      return Reflect.get(...arguments);
+    },
+  });
 }

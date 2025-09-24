@@ -5,12 +5,12 @@ export function generateTreeDiagram(tree, person) {
 
   const parents = [
     mother && {
-      ...mother,
-      parents: Object.values(findParents(tree, mother)).filter(Boolean),
+      parent: mother,
+      grandparents: Object.values(findParents(tree, mother)).filter(Boolean),
     },
     father && {
-      ...father,
-      parents: Object.values(findParents(tree, father)).filter(Boolean),
+      parent: father,
+      grandparents: Object.values(findParents(tree, father)).filter(Boolean),
     },
   ].filter(Boolean);
 
@@ -25,9 +25,9 @@ export function generateTreeDiagram(tree, person) {
     'classDef primary fill:#007595,stroke:#00a6f4,stroke-width:1px,color:#fff;',
     `${person.prettyId}(${nodeText(person, false)}):::primary`,
     ...parents
-      .map((parent) => [
+      .map(({ parent, grandparents }) => [
         `${parent.prettyId}(${nodeText(parent)}):::parents-->${person.prettyId}`,
-        ...parent.parents.map(
+        ...grandparents.map(
           (gp) => `${gp.prettyId}(${nodeText(gp)}):::grands-->${parent.prettyId}`
         ),
       ])
