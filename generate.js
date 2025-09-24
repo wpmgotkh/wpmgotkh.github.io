@@ -403,25 +403,24 @@ function generateHomepage(top10Surnames, noteworthy) {
 }
 
 function generateSurnameIndex(surnameMap, top10Surnames) {
-  const allSurnames = Object.keys(surnameMap).sort((a, b) => a.localeCompare(b));
+  const top10SurnameCounts = top10Surnames.reduce((acc, [surname, entries]) => {
+    return [...acc, { surname, count: entries.length, slug: urlify(surname) }];
+  }, []);
 
-  const lines = [
-    `---`,
-    `layout: templates/basic.njk`,
-    `title: Surnames`,
-    `---`,
-    `## Surnames`,
-    '### Top 10 Surnames',
-    ...top10Surnames.map(([surname, entries]) => {
-      return `- [${surname}](/surnames/${urlify(surname)}) (${entries.length})`;
-    }),
-    '### All Surnames',
-    ...allSurnames.map((surname) => {
-      return `- [${surname}](/surnames/${urlify(surname)}) (${surnameMap[surname].length})`;
-    }),
-  ];
+  const surnames = Object.entries(surnameMap).reduce((acc, [surname, entries]) => {
+    return [...acc, { surname, count: entries.length, slug: urlify(surname) }];
+  }, []);
 
-  fs.writeFileSync(`${PAGES_DIR}/surnames/index.md`, lines.join('\n'), 'utf-8');
+  const sortedSurnames = surnames.sort((a, b) => a.surname.localeCompare(b.surname));
+
+  fs.writeFileSync(
+    `${PAGES_DIR}/_data/surnames.json`,
+    JSON.stringify({
+      top10Surnames: top10SurnameCounts,
+      allSurnames: sortedSurnames,
+    }),
+    'utf-8'
+  );
 }
 
 function generateSurnameFiles(surnameMap) {
