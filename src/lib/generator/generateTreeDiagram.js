@@ -32,6 +32,7 @@ export function generateTreeDiagram(tree, person) {
         ),
       ])
       .flat(),
+    'linkStyle default stroke:#a1a1a1',
     '```',
     '{% endblock %}',
   ];
