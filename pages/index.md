@@ -11,8 +11,8 @@ These are people somewhere in the tree who are famous or otherwise noteworthy.
 ## Top 10 Surnames
  - [Wilson](/surnames/wilson) (44)
  - [Kobel](/surnames/kobel) (43)
- - [Geelhoed](/surnames/geelhoed) (33)
  - [Munger](/surnames/munger) (33)
+ - [Geelhoed](/surnames/geelhoed) (32)
  - [Terrell](/surnames/terrell) (31)
  - [Wilmot](/surnames/wilmot) (31)
  - [Terrill](/surnames/terrill) (31)

@@ -15,7 +15,7 @@ title: Conant Names
 - [John M. Conant](/people/3/38989658), about 1870
 - [Lulu Conant](/people/6/66371832), May 1886
 - [Mary Conant](/people/9/9630521), about 1873
-- [Mary Jane Conant](/people/2/27722232), Abt 1829
+- [Mary Jane Conant](/people/2/27722232), 18 MAR 1832
 - [Myrtle Conant](/people/5/54992094), Nov 1886
 - [Nelson H. Conant](/people/9/90473988), 17 AUG 1874
 - [Ray Conant](/people/9/99936990), about 1892

@@ -34,5 +34,4 @@ title: Geelhoed Names
 - [Maarten Geelhoed](/people/2/23159760), 14 MAY 1835
 - [Marinus Geelhoed](/people/4/47020978), abt 1605
 - [Mary Ann Geelhoed](/people/6/6202111), 08 FEB 1916
-- [Raymond Geelhoed](/people/9/98188250), 30 DEC 1924
 - [Simon Geelhoed](/people/7/784264), abt 1580
