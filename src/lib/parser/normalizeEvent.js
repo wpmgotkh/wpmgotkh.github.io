@@ -7,6 +7,7 @@ export const normalizeEvent = (tree, event, id) => {
 
   const date = event.children.find(({ type }) => type === 'DATE');
   const place = event.children.find(({ type }) => type === 'PLAC');
+  const addr = event.children.find(({ type }) => type === 'ADDR');
 
   const sources = event.children.filter(({ type }) => type === 'SOUR');
 
@@ -15,7 +16,9 @@ export const normalizeEvent = (tree, event, id) => {
     type: event.type,
     date: date ? date.data.value : '',
     normalizedDate: date ? normalizeDate(date.data.value) : undefined,
-    place: [event.data.value, place?.data.value].filter(Boolean).join(', '),
+    place: [event.data.value, addr?.data.value, place?.data.value]
+      .filter(Boolean)
+      .join(', '),
     sources: normalizeCitations(tree, sources),
   };
 };
