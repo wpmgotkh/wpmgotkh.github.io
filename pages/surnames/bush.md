@@ -8,3 +8,4 @@ title: Bush Names
 - [Jenna Welch Bush](/people/8/82743343), 25 NOV 1981
 - [John Ellis Bush](/people/8/82675226), 11 FEB 1953
 - [Prescott Sheldon Bush](/people/9/99501197)
+- [Timothy Bush](/people/3/33561872)
