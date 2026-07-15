@@ -151,7 +151,7 @@ function generateNotes(tree, person) {
     lines.push(
       note
         .split('\n')
-        .map((line) => `  > ${line}  `)
+        .map((line) => `  > ${line}`.trimEnd())
         .join('\n')
     );
   }
@@ -317,12 +317,12 @@ function processGedcom(inputFile) {
         );
 
         for (const citation of event.sources) {
-          documentLines.push(`* ${citation.name} ${citation.page ? ` - ${citation.page}` : ``}`);
+          documentLines.push(`* ${citation.name}${citation.page ? ` - ${citation.page}` : ``}`);
           documentLines.push(
             ...citation.notes.map((note) =>
               note
                 .split('\n')
-                .map((line) => `  > ${line}  `)
+                .map((line) => `  > ${line}`.trimEnd())
                 .join('\n')
             )
           );
