@@ -342,7 +342,7 @@ function processGedcom(inputFile) {
       documentLines
         .filter(Boolean)
         .map((line) => line.trim())
-        .join('\n'),
+        .join('\n') + '\n',
       'utf-8'
     );
   }
@@ -368,7 +368,7 @@ function processGedcom(inputFile) {
 
   generateSurnameIndex(surnameMap, top10Surnames);
 
-  fs.writeFileSync('pages/names.json', JSON.stringify(nameIndex), 'utf-8');
+  fs.writeFileSync('pages/names.json', JSON.stringify(nameIndex) + '\n', 'utf-8');
 
   spinner.succeed('Generated surname index!');
   spinner.succeed('Done!');
@@ -399,7 +399,7 @@ function generateHomepage(top10Surnames, noteworthy) {
     '[View All](/surnames)',
   ];
 
-  fs.writeFileSync(`${PAGES_DIR}/index.md`, lines.join('\n'), 'utf-8');
+  fs.writeFileSync(`${PAGES_DIR}/index.md`, lines.join('\n') + '\n', 'utf-8');
 }
 
 function generateSurnameIndex(surnameMap, top10Surnames) {
@@ -418,7 +418,7 @@ function generateSurnameIndex(surnameMap, top10Surnames) {
     JSON.stringify({
       top10Surnames: top10SurnameCounts,
       allSurnames: sortedSurnames,
-    }),
+    }) + '\n',
     'utf-8'
   );
 }
@@ -438,7 +438,11 @@ function generateSurnameFiles(surnameMap) {
       }),
     ];
 
-    fs.writeFileSync(`${PAGES_DIR}/surnames/${urlify(surname)}.md`, lines.join('\n'), 'utf-8');
+    fs.writeFileSync(
+      `${PAGES_DIR}/surnames/${urlify(surname)}.md`,
+      lines.join('\n') + '\n',
+      'utf-8'
+    );
   }
 }
 
