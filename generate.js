@@ -302,7 +302,7 @@ function processGedcom(inputFile) {
 
     const sourcedEvents = [
       ...availableEvents.filter((event) => event.sources.length),
-      ...familyEvents,
+      ...familyEvents.filter((event) => event.sources.length),
     ].sort((a, b) =>
       a.normalizedDate && b.normalizedDate ? a.normalizedDate.localeCompare(b.normalizedDate) : 0
     );
