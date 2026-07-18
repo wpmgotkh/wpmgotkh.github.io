@@ -332,7 +332,7 @@ function processGedcom(inputFile) {
           );
         }
 
-        if (eventIndex + 1 !== availableEvents.length) {
+        if (eventIndex + 1 !== sourcedEvents.length) {
           documentLines.push(LINE_BREAK);
         }
       }
