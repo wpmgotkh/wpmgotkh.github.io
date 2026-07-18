@@ -3,6 +3,7 @@ layout: templates/basic.njk
 title: Hardy Names
 ---
 ## Hardy Names
+- [Agnes M. Hardy](/people/6/66419672), 03 DEC 1909
 - [Anna Catherine Hardy](/people/2/25919759), 19 MAY 1914
 - [Anna Hardy](/people/2/23108580), Nov 1885
 - [Emma Hardy](/people/8/86876158), Sep 1891

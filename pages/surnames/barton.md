@@ -3,6 +3,7 @@ layout: templates/basic.njk
 title: Barton Names
 ---
 ## Barton Names
+- [Dan Barton](/people/7/77714466), 20 SEP 1927
 - [Dan T Barton](/people/9/95106328), 23 JAN 1886
 - [Elvin Carl Barton](/people/6/61879288), 21 MAR 1920
 - [Harry William Barton](/people/8/83492690), 15 FEB 1919
