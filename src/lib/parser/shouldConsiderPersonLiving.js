@@ -16,8 +16,8 @@ export function shouldConsiderPersonLiving(tree, person) {
   }
 
   // if any of their children were born >= 100 years ago
-  const maxChildBirthYear = findMinChildBirthYear(tree, person);
-  if (maxChildBirthYear && now - maxChildBirthYear >= 100) return false;
+  const minChildBirthYear = findMinChildBirthYear(tree, person);
+  if (minChildBirthYear && now - minChildBirthYear >= 100) return false;
 
   // if either of their parents were born >= 160 years ago
 
