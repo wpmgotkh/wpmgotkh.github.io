@@ -22,7 +22,10 @@ export function ageAtEvent(person, eventDate) {
     let days = eventDay - birthDay;
 
     if (days < 0) {
-      days += 30;
+      // Borrow the actual number of days in the month before eventMonth (handles
+      // 28/29/30/31-day months and leap years, with year rollover for January).
+      const daysInPriorMonth = new Date(eventYear, eventMonth - 1, 0).getDate();
+      days += daysInPriorMonth;
       months -= 1;
     }
     if (months < 0) {
