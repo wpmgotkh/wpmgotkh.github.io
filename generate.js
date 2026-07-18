@@ -2,7 +2,7 @@ import fs from 'fs';
 import { parse as parseGedcom } from 'gedcom';
 import ora from 'ora';
 import path from 'path';
-import { eventTypes } from './src/lib/const.js';
+import { eventTypes, personalEventTypes } from './src/lib/const.js';
 import { generateTreeDiagram } from './src/lib/generator/generateTreeDiagram.js';
 import { nameAndBirth } from './src/lib/generator/nameAndBirth.js';
 import { privatizeName } from './src/lib/generator/privatizeName.js';
@@ -232,9 +232,13 @@ function processGedcom(inputFile) {
 
     const events = [...person.events.birth];
 
+    // Indexed against the same personalEventTypes-filtered array normalizePerson.js uses for
+    // birth/death/burial, so `event-N` anchor IDs share one counter and never collide.
     const otherEvents = person.children
-      .filter(({ type }) => eventTypes.includes(type))
-      .map((event, index) => normalizeEvent(tree, event, `event-${index}`));
+      .filter(({ type }) => personalEventTypes.includes(type))
+      .map((event, index) => ({ event, index }))
+      .filter(({ event }) => eventTypes.includes(event.type))
+      .map(({ event, index }) => normalizeEvent(tree, event, `event-${index}`));
 
     events.push(...otherEvents);
 

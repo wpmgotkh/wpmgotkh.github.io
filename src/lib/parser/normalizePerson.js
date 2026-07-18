@@ -1,3 +1,4 @@
+import { personalEventTypes } from '../const.js';
 import { upper } from '../upper.js';
 import { findRecord } from './findRecord.js';
 import { findValue } from './findValue.js';
@@ -37,15 +38,20 @@ export function normalizePerson(tree, person) {
           if (!('events' in target)) {
             target.events = {};
             // TODO: FIXME: handle multiple
-            const birthIndex = target.children.findIndex(({ type }) => type === 'BIRT');
-            const deathIndex = target.children.findIndex(({ type }) => type === 'DEAT');
-            const burialIndex = target.children.findIndex(({ type }) => type === 'BURI');
+            // IDs are indexed against the full set of personal event children (shared with
+            // generate.js's otherEvents) so `event-N` anchors never collide across event types.
+            const eventChildren = target.children.filter(({ type }) =>
+              personalEventTypes.includes(type)
+            );
+            const birthIndex = eventChildren.findIndex(({ type }) => type === 'BIRT');
+            const deathIndex = eventChildren.findIndex(({ type }) => type === 'DEAT');
+            const burialIndex = eventChildren.findIndex(({ type }) => type === 'BURI');
 
-            const birth = normalizeEvent(tree, target.children[birthIndex], `event-${birthIndex}`);
-            const death = normalizeEvent(tree, target.children[deathIndex], `event-${deathIndex}`);
+            const birth = normalizeEvent(tree, eventChildren[birthIndex], `event-${birthIndex}`);
+            const death = normalizeEvent(tree, eventChildren[deathIndex], `event-${deathIndex}`);
             const burial = normalizeEvent(
               tree,
-              target.children[burialIndex],
+              eventChildren[burialIndex],
               `event-${burialIndex}`
             );
 
