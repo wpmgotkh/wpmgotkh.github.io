@@ -3,13 +3,13 @@ layout: templates/basic.njk
 title: John W. Barton
 ---
 
-## John W. Barton
+# John W. Barton
 
 [John W. Barton](/people/5/56328061/) was the father of [Dan T. Barton](/people/9/95106328/), according to both Dan's death certificate and marriage record. But I have as-of-yet been unable to determine who John W. Barton and Rebecca Clester were and who they descended from.
 
 Rebecca died young in 1893, according to findagrave. John quickly remaried to Nellie Myers.
 
-### Marriage Record (Dan + Blanche)
+## Marriage Record (Dan + Blanche)
 
 Dan + Blanche's marriage record notes his father as J W Barton.
 
@@ -19,7 +19,7 @@ Dan + Blanche's marriage record notes his father as J W Barton.
 > Father: J W Barton  
 > Spouse: Blanche Ellen Powell
 
-### Death Certificate (Dan)
+## Death Certificate (Dan)
 
 Dan's death certificate lists his parents as John Barton and Rebecca Clester.
 
@@ -29,7 +29,7 @@ Dan's death certificate lists his parents as John Barton and Rebecca Clester.
 > Father: John Barton  
 > Mother: Rebecca Clester
 
-### Marriage to Nellie
+## Marriage to Nellie
 
 |                     |                      |
 | ------------------- | -------------------- |
@@ -41,9 +41,9 @@ Dan's death certificate lists his parents as John Barton and Rebecca Clester.
 | **FHL Film Number** | 1035212              |
 | **Reference ID**    | 2:3RBS5MS            |
 
-### Census Data
+## Census Data
 
-#### 1880 US Census
+### 1880 US Census
 
 **Place: Grant, Cloud County, Kansas, USA**
 
@@ -54,7 +54,7 @@ Dan's death certificate lists his parents as John Barton and Rebecca Clester.
 | James P. Barton   | 8   | Son      |
 | Thomas E. Barton  | 1   | Son      |
 
-#### 1900 US Census
+### 1900 US Census
 
 **Place: Illinois, Nemaha, Kansas, USA**
 
@@ -70,3 +70,13 @@ John and Nellie are listed as being married for 6 years, which matches the marri
 | Edward H. Barton   | 4   | Son      | Kansas     | Missouri  | Penn      |
 | Clarence C. Barton | 3   | Son      | Kansas     | Missouri  | Penn      |
 | Rosco E. Barton    | 1   | Son      | Kansas     | Missouri  | Penn      |
+
+## Speculation
+
+I want to believe that the parents of John W. Barton are Silas Ransom Barton and Harriet Wolcott. They had a son named John W. Barton who was born around the same time as our John W. Barton. However, a family bible entry shows this John dying 8 Jul 1883. This matches up with a gravestone of a John W. Barton with the same death date, aged 34 years, in Millerboro Cemetery in Antelope County, Nebraska.
+
+Silas Ransom Barton Jr. is also buried in another cemetery in the same county.
+
+The internet seems to think that this JW Barton is the son of Silas Ransom Sr, which makes me think that this isn't the parents of our JW Barton, as he was alive at least until 1900.
+
+Which leaves me with no clues as to who the parents of our JW Barton were.
