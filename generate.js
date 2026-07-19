@@ -1,9 +1,10 @@
 import fs from 'fs';
 import { parse as parseGedcom } from 'gedcom';
+import yaml from 'js-yaml';
 import ora from 'ora';
 import path from 'path';
 import { eventTypes, personalEventTypes } from './src/lib/const.js';
-import { generateTreeDiagram } from './src/lib/generator/generateTreeDiagram.js';
+import { buildPedigreeData } from './src/lib/generator/generateTreeDiagram.js';
 import { nameAndBirth } from './src/lib/generator/nameAndBirth.js';
 import { privatizeName } from './src/lib/generator/privatizeName.js';
 import { sexIcon } from './src/lib/generator/sexIcon.js';
@@ -188,10 +189,19 @@ function processGedcom(inputFile) {
 
     const deathDate = person.events.death?.[0]?.date;
 
+    const pedigreeData = buildPedigreeData(tree, person);
+
+    const frontmatter = {
+      layout: 'templates/basic.njk',
+      title: privatizeName(person),
+    };
+    if (pedigreeData) {
+      frontmatter.pedigree = pedigreeData;
+    }
+
     const documentLines = [
       '---',
-      'layout: templates/basic.njk',
-      `title: ${privatizeName(person)}`,
+      yaml.dump(frontmatter, { skipInvalid: true }).trimEnd(),
       '---',
     ];
     documentLines.push(`## ${sexIcon(person)} ${privatizeName(person)}`);
@@ -208,7 +218,9 @@ function processGedcom(inputFile) {
       documentLines.push(LINE_BREAK);
     }
 
-    documentLines.push(...generateTreeDiagram(tree, person));
+    if (pedigreeData) {
+      documentLines.push('{{ pedigree | renderPedigree }}');
+    }
 
     documentLines.push(LINE_BREAK);
 

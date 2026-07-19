@@ -25,4 +25,8 @@ These are the top 10 most common surnames found within the data.
 {% endfor %}
 
 
-{% if pagination.href.previous %}[Previous]({{pagination.href.previous}}){% else %}Previous{% endif %} | {% if pagination.href.next %}[Next]({{pagination.href.next}}){% else %}Next{% endif %}
+
+<div class="pager not-prose flex justify-between mt-6">
+{% if pagination.href.previous %}<a href="{{pagination.href.previous}}">← Previous</a>{% else %}<span>← Previous</span>{% endif %}
+{% if pagination.href.next %}<a href="{{pagination.href.next}}">Next →</a>{% else %}<span>Next →</span>{% endif %}
+</div>

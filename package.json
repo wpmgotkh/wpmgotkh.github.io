@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@11ty/eleventy": "^3.1.2",
-    "@kevingimbel/eleventy-plugin-mermaid": "^3.0.0",
     "gedcom": "^3.0.4",
+    "js-yaml": "^4.1.0",
     "ora": "^9.0.0",
     "uuid": "^13.0.0"
   },

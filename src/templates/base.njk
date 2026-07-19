@@ -6,23 +6,29 @@ title: Wilson Family Project
 <head>
   <title>{{ title }}</title>
   <link rel="stylesheet" href="/assets/styles/index.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌳</text></svg>">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
-  <div class="px-8 py-4">
-    <div class="prosey">
-      <h1><a href="/">Wilson Family Project</a></h1>
-      <div>
-      <a href="/">Home</a> | <a href="/surnames">Surnames</a> | <a href="/dead-ends">Dead Ends</a>
-    </div>
-    
-    {{ content | safe }}
+  <div class="px-4 py-6 sm:px-8">
+    <div class="mx-auto max-w-3xl">
+      <div class="prosey">
+        <h1 class="mb-0"><a href="/" class="no-underline">🌳 Wilson Family Project</a></h1>
+        <nav class="site-nav -mt-2 mb-4 flex gap-1 border-b border-gray-200 pb-3 text-sm dark:border-gray-700">
+          <a href="/">Home</a>
+          <a href="/surnames">Surnames</a>
+          <a href="/dead-ends">Dead Ends</a>
+        </nav>
 
-    <div class="text-sm mt-4 border-t border-gray-300 pt-4 dark:border-gray-600">
-      Site last updated on {{ page.date.toLocaleDateString() }}
+        {{ content | safe }}
+
+        <div class="mt-8 flex items-center justify-between border-t border-gray-200 pt-4 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
+          <span>Site last updated on {{ page.date.toLocaleDateString() }}</span>
+          <a href="#top" class="no-underline">Back to top ↑</a>
+        </div>
+      </div>
     </div>
   </div>
 
-  {% mermaid_js %}
 </body>
 </html>

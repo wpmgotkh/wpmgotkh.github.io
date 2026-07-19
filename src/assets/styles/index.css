@@ -2,6 +2,72 @@
 @plugin "@tailwindcss/typography";
 @import '@mdit/plugin-alert/style';
 
+::selection {
+  background-color: #93c5fd;
+  color: #1e3a8a;
+}
+
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.prosey a {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.prosey a:hover {
+  text-decoration-color: currentColor;
+}
+
+.prosey h1 a {
+  text-decoration-line: none;
+}
+
+/* Event / relationship tables generated on person pages */
+.prosey table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid theme(colors.gray.200);
+}
+
+.prosey th,
+.prosey td {
+  padding: 0.5rem 0.75rem;
+  vertical-align: middle;
+}
+
+.prosey th:nth-child(2),
+.prosey td:nth-child(2),
+.prosey th:nth-child(3),
+.prosey td:nth-child(3) {
+  white-space: nowrap;
+}
+
+.prosey thead th {
+  background-color: theme(colors.gray.100);
+  font-weight: 600;
+}
+
+.prosey tbody tr:nth-child(even) {
+  background-color: theme(colors.gray.50);
+}
+
+.prosey tbody tr {
+  transition: background-color 0.1s ease;
+}
+
+.prosey tbody tr:hover {
+  background-color: theme(colors.blue.50);
+}
+
 .prose {
   &
     :where(blockquote p:last-of-type):not(
@@ -24,15 +90,124 @@
   @apply prose dark:prose-invert w-full max-w-full;
 }
 
-pre.mermaid:not([data-processed='true']) {
-  display: none;
+.site-nav a {
+  text-decoration: none;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  margin-left: -0.625rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
-pre.mermaid {
-  background-color: transparent;
+.site-nav a:hover {
+  background-color: theme(colors.gray.100);
 }
 
-pre.mermaid a,
-pre.mermaid a:visited {
-  color: #fff;
+.pager a,
+.pager span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid theme(colors.gray.300);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.pager a:hover {
+  background-color: theme(colors.gray.100);
+  border-color: theme(colors.gray.400);
+}
+
+.pager span {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Compact ancestor tree (person -> parents -> grandparents) on person pages */
+.pedigree {
+  margin: 1rem 0;
+}
+
+.pedigree-person {
+  line-height: 1.4;
+}
+
+.pedigree-birth {
+  color: theme(colors.gray.500);
+  font-size: 0.8125rem;
+}
+
+.pedigree-branches {
+  margin-top: 0.375rem;
+  padding-left: 1rem;
+  border-left: 1px solid theme(colors.gray.200);
+}
+
+.pedigree-branch {
+  position: relative;
+  padding-left: 0.875rem;
+}
+
+.pedigree-branch + .pedigree-branch {
+  margin-top: 0.375rem;
+}
+
+.pedigree-branch::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 0.625rem;
+  border-top: 1px solid theme(colors.gray.200);
+}
+
+.pedigree-branch > .pedigree-branches {
+  margin-top: 0.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prosey table {
+    border-color: theme(colors.gray.700);
+  }
+
+  .prosey thead th {
+    background-color: theme(colors.gray.800);
+  }
+
+  .prosey tbody tr:nth-child(even) {
+    background-color: color-mix(in oklab, theme(colors.gray.800) 45%, transparent);
+  }
+
+  .prosey tbody tr:hover {
+    background-color: color-mix(in oklab, theme(colors.blue.900) 40%, transparent);
+  }
+
+  .site-nav a:hover {
+    background-color: theme(colors.gray.800);
+  }
+
+  .pager a,
+  .pager span {
+    border-color: theme(colors.gray.700);
+  }
+
+  .pager a:hover {
+    background-color: theme(colors.gray.800);
+    border-color: theme(colors.gray.600);
+  }
+
+  .pedigree-birth {
+    color: theme(colors.gray.400);
+  }
+
+  .pedigree-branches {
+    border-color: theme(colors.gray.700);
+  }
+
+  .pedigree-branch::before {
+    border-color: theme(colors.gray.700);
+  }
 }
