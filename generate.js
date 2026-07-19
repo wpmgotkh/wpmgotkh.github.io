@@ -141,8 +141,30 @@ function generateRelationships(tree, person, families) {
   return lines;
 }
 
+function isBioNote(tree, noteRef) {
+  const note = findRecord(tree, 'NOTE', noteRef.data.pointer);
+
+  return !!note?.children.find(({ type, data }) => {
+    if (type !== 'LABL') return false;
+
+    const label = findRecord(tree, 'LABL', data.pointer);
+
+    return label?.children.find(({ type }) => type === 'TITL')?.data.value === 'Bio';
+  });
+}
+
+function generateBio(tree, person) {
+  const noteRefs = findRecords(person, 'NOTE').filter((noteRef) => isBioNote(tree, noteRef));
+  const notes = normalizeNotes(tree, noteRefs);
+
+  if (!notes.length) return [];
+
+  return ['## 📖 Bio', LINE_BREAK, ...notes];
+}
+
 function generateNotes(tree, person) {
-  const notes = normalizeNotes(tree, findRecords(person, 'NOTE'));
+  const noteRefs = findRecords(person, 'NOTE').filter((noteRef) => !isBioNote(tree, noteRef));
+  const notes = normalizeNotes(tree, noteRefs);
 
   if (!notes.length) return [];
 
@@ -230,6 +252,14 @@ function processGedcom(inputFile) {
         '> This is a public figure and therefore bypasses some privacy restrictions for living persons.'
       );
       documentLines.push('\n');
+    }
+
+    if (!person.consideredLiving || person.noteworthy) {
+      const bioLines = generateBio(tree, person);
+      if (bioLines.length) {
+        documentLines.push(...bioLines);
+        documentLines.push(LINE_BREAK);
+      }
     }
 
     if ((!person.consideredLiving || person.noteworthy) && person.name.surname) {
